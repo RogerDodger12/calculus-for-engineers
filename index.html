@@ -1429,6 +1429,16 @@ function refreshParent(){
   if(ui.view!=='parent')return;
   $('#app').innerHTML=parentView();renderSyncNote();
 }
+async function doRemove(key){
+  var g=groupStudents(sync.students).filter(function(x){return x.key===key})[0];
+  ui.removeAsk=null;
+  if(!g){refreshParent();return}
+  try{
+    await Promise.all(g.ids.map(function(id){return api('DELETE','/api/family/'+encodeURIComponent(syncCfg.code)+'/student/'+id)}));
+    sync.msg='';
+  }catch(e){sync.msg='Couldn’t remove that student right now. Try again.'}
+  await refreshStudents();
+}
 function setErr(m){var el=$('#sync-err');if(el)el.textContent=m||''}
 async function doCreate(){
   setErr('');
@@ -1580,7 +1590,7 @@ function progressTable(P){
       var r=p.q&&p.q[q.id];
       if(r&&r.done){done++;if(r.first)firsts++;else{miss.push(q.topic);talk.push({lesson:l.title,t:q.talk})}}
     });
-    h+='<tr><td><strong>Unit '+l.unit+': '+l.title+'</strong></td><td><span class="chip '+st+'">'+STATUS_LABEL[st]+'</span></td><td>'+(done?firsts+' of '+done+' answered':'Not yet')+'</td><td>'+(miss.length?miss.join('; '):(done?'Nothing flagged':'Not yet'))+'</td></tr>';
+    h+='<tr><td><strong>Unit '+l.unit+': '+l.title+'</strong></td><td><span class="chip '+st+'">'+STATUS_LABEL[st]+'</span></td><td>'+(done?firsts+' of '+done+' right on the first try'+(done<l.questions.length?' ('+done+' of '+l.questions.length+' answered)':''):'Not yet')+'</td><td>'+(miss.length?miss.join('; '):(done?'Nothing flagged':'Not yet'))+'</td></tr>';
   });
   h+='</tbody></table></div>';
   h+='<h3 style="margin:1.25rem 0 .4rem;font-size:1.1rem">Questions to talk about</h3>';
@@ -1593,9 +1603,10 @@ function groupStudents(list){
   list.forEach(function(x){
     if(!x)return;
     var k=String(x.name||'').trim().toLowerCase()||x.id;
-    if(!map[k]){map[k]={name:x.name||'Student',track:x.track,updatedAt:x.updatedAt||0,progress:x.progress||{}};order.push(k)}
+    if(!map[k]){map[k]={key:k,ids:[x.id],name:x.name||'Student',track:x.track,updatedAt:x.updatedAt||0,progress:x.progress||{}};order.push(k)}
     else{
       var g=map[k];
+      g.ids.push(x.id);
       g.progress=mergeProgress(g.progress,x.progress||{});
       if((x.updatedAt||0)>g.updatedAt){g.updatedAt=x.updatedAt;g.track=x.track}
     }
@@ -1606,7 +1617,16 @@ function studentBlock(st){
   var P=st.progress||{},meta=[];
   if(CTX[st.track])meta.push(CTX[st.track].label+' track');
   if(st.updatedAt){meta.push('last active '+new Date(st.updatedAt).toLocaleString([],{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}))}
-  return '<section class="stu"><div class="stu-h"><h2>'+esc(st.name)+'</h2><span class="meta">'+meta.join(', ')+'</span></div>'+progressTable(P)+'</section>';
+  return '<section class="stu"><div class="stu-h"><h2>'+esc(st.name)+'</h2><span class="meta">'+meta.join(', ')+'</span></div>'+progressTable(P)+removeControl(st)+'</section>';
+}
+function removeControl(st){
+  if(!st.ids||!st.ids.length)return '';
+  var k=esc(st.key);
+  if(ui.removeAsk===st.key){
+    return '<div class="note" role="status"><p style="margin:0 0 .6rem">Remove <strong>'+esc(st.name)+'</strong> from this family? This deletes their shared progress for everyone with the code. Progress on their own device stays. If their device is still joined to this family, they’ll reappear the next time it saves.</p>'+
+      '<div class="cta" style="margin-top:0"><button class="btn primary small" data-act="stu-remove-yes" data-key="'+k+'">Yes, remove</button><button class="btn small" data-act="stu-remove-no">Cancel</button></div></div>';
+  }
+  return '<div class="cta" style="margin-top:1rem"><button class="btn small" data-act="stu-remove-ask" data-key="'+k+'">Remove this student</button></div>';
 }
 function parentView(){
   var h='<h1 class="lt" tabindex="-1">Parent view</h1><p class="lede">See which lessons the student has finished and where they needed a second try. Practice counts as first try only when both the tool and the reason were right the first time.</p><p class="note" id="sync-note"></p>';
@@ -2225,6 +2245,9 @@ document.addEventListener('click',function(e){
   else if(a==='sync-leave'){doLeave()}
   else if(a==='sync-copy'){doCopy(b)}
   else if(a==='sync-refresh'){refreshStudents()}
+  else if(a==='stu-remove-ask'){ui.removeAsk=b.dataset.key;refreshParent()}
+  else if(a==='stu-remove-no'){ui.removeAsk=null;refreshParent()}
+  else if(a==='stu-remove-yes'){doRemove(b.dataset.key)}
   else if(a==='open'){ui.lessonId=b.dataset.id;ui.view='lesson';ui.step=0;ui.pq=null;markStep(ui.lessonId,0);render(true)}
   else if(a==='step'){setStep(+b.dataset.i)}
   else if(a==='answer'){answer(+b.dataset.s,+b.dataset.i)}
