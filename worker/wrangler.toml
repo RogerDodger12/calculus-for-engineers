@@ -1,0 +1,13 @@
+name = "calculus-progress"
+main = "src/worker.js"
+compatibility_date = "2025-06-01"
+
+# The site that is allowed to call this Worker. Use the origin only: no path, no trailing slash.
+# Several origins can be separated with commas.
+[vars]
+ALLOWED_ORIGIN = "https://YOUR-GITHUB-USERNAME.github.io"
+
+# Create the namespace first (see the README), then paste its id here.
+[[kv_namespaces]]
+binding = "PROGRESS"
+id = "PASTE-YOUR-KV-NAMESPACE-ID-HERE"

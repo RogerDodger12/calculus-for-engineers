@@ -1,0 +1,2247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Calculus for Engineers</title>
+<meta name="description" content="Learn why each calculus tool exists and when to use it, with examples for general, mechanical, and civil engineering.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📐%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;600;700&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&amp;display=swap">
+<style>
+*,*::before,*::after{box-sizing:inherit}
+:root{
+  box-sizing:border-box;
+  color-scheme:light;
+  --paper:#EEF2EF;--surface:#FBFCFA;--ink:#14213D;--soft:#4B5A72;--line:#C7D2CC;
+  --grid:rgba(20,33,61,.06);--cobalt:#2447D6;--on-cobalt:#FFFFFF;--mark:#F2D43D;--mark-ink:#14213D;
+  --good:#1B7A45;--good-bg:#E1F3E8;--bad:#B3261E;--bad-bg:#FBE7E5;
+  --display:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --body:"Source Serif 4",Georgia,"Times New Roman",serif;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#0F1724;--surface:#162033;--ink:#E8EDF5;--soft:#9DABC0;--line:#2B3A53;
+    --grid:rgba(170,195,235,.07);--cobalt:#8AA5FF;--on-cobalt:#0F1724;--mark:#F2D43D;--mark-ink:#14213D;
+    --good:#66D492;--good-bg:#12301F;--bad:#FF9188;--bad-bg:#3A1816;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#0F1724;--surface:#162033;--ink:#E8EDF5;--soft:#9DABC0;--line:#2B3A53;
+  --grid:rgba(170,195,235,.07);--cobalt:#8AA5FF;--on-cobalt:#0F1724;--mark:#F2D43D;--mark-ink:#14213D;
+  --good:#66D492;--good-bg:#12301F;--bad:#FF9188;--bad-bg:#3A1816;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{
+  margin:0;background-color:var(--paper);color:var(--ink);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+  font:400 1.0625rem/1.65 var(--body);
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+h1,h2,h3{font-family:var(--display);line-height:1.12;margin:0;letter-spacing:-.01em}
+h1:focus{outline:none}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--cobalt);outline-offset:2px}
+
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--paper);border-bottom:1px solid var(--line)}
+.bar{max-width:1040px;margin:0 auto;padding:.7rem 1.25rem;display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1.25rem}
+.brand{background:none;border:0;padding:0;margin-right:auto;font:700 1.15rem var(--display);letter-spacing:-.01em}
+.nav{display:flex;gap:.25rem}
+.nav button{background:none;border:0;border-bottom:2px solid transparent;padding:.35rem .55rem;font:600 .95rem var(--display)}
+.nav button[aria-current="page"]{border-bottom-color:var(--cobalt)}
+.tracks{display:flex;align-items:center;gap:.35rem}
+.tlabel{font:500 .9rem var(--display);color:var(--soft);margin-right:.2rem}
+.seg{display:flex;border:1.5px solid var(--ink);border-radius:7px;overflow:hidden}
+.seg button{background:transparent;border:0;padding:.35rem .75rem;font:600 .9rem var(--display)}
+.seg button+button{border-left:1.5px solid var(--ink)}
+.seg button[aria-checked="true"]{background:var(--ink);color:var(--paper)}
+
+main{max-width:1040px;margin:0 auto;padding:2.25rem 1.25rem 4.5rem}
+.hero h1{font-size:clamp(2.1rem,5.2vw,3.5rem);font-weight:700;letter-spacing:-.025em;max-width:19ch}
+.lede{color:var(--soft);max-width:62ch;margin:1rem 0 0}
+.cta{margin-top:1.5rem;display:flex;flex-wrap:wrap;gap:.75rem}
+.btn{display:inline-block;border:1.5px solid var(--ink);background:transparent;color:var(--ink);padding:.6rem 1.05rem;border-radius:7px;font:600 1rem var(--display)}
+.btn.primary{background:var(--cobalt);border-color:var(--cobalt);color:var(--on-cobalt)}
+.btn.small{padding:.35rem .75rem;font-size:.9rem}
+.btn:hover{border-color:var(--cobalt)}
+.btn.primary:hover{filter:brightness(1.08)}
+
+h2.sec-h{font-size:1.6rem;margin:3rem 0 1.25rem}
+.rail{list-style:none;margin:0;padding:0}
+.rail>li{position:relative;padding:0 0 2rem 3.6rem}
+.rail>li::before{content:"";position:absolute;left:1.1rem;top:2.4rem;bottom:.2rem;border-left:2px solid var(--line)}
+.rail>li:last-child::before{display:none}
+.num{position:absolute;left:0;top:0;width:2.3rem;height:2.3rem;border:2px solid var(--ink);border-radius:50%;background:var(--surface);display:grid;place-items:center;font:700 1rem var(--display)}
+.rail>li.soon .num{border-style:dashed;color:var(--soft);border-color:var(--soft)}
+.rail h3{font-size:1.3rem;padding-top:.15rem}
+.rail .blurb{margin:.2rem 0 .6rem;color:var(--soft)}
+.soon-note{color:var(--soft);font-style:italic;margin:0}
+.lessons{list-style:none;margin:0;padding:0}
+.lesson{display:grid;grid-template-columns:auto 1fr auto;gap:.5rem 1rem;align-items:center;padding:.8rem 0;border-top:1px solid var(--line)}
+.lesson .lt2{font:600 1.05rem var(--display)}
+.lesson .ls{display:block;color:var(--soft);font-size:.95rem;line-height:1.45}
+.chip{display:inline-block;border:1.5px solid var(--soft);color:var(--soft);border-radius:999px;padding:.1rem .6rem;font:600 .8rem var(--display);white-space:nowrap}
+.chip.done{border-color:var(--good);background:var(--good-bg);color:var(--good)}
+.chip.doing{border-color:var(--ink);background:var(--mark);color:var(--mark-ink)}
+
+.back{background:none;border:0;padding:0;color:var(--cobalt);font:600 .95rem var(--display);margin-bottom:1rem;text-decoration:underline;text-underline-offset:3px}
+.lt{font-size:clamp(1.8rem,4.4vw,2.7rem);font-weight:700;letter-spacing:-.02em}
+.steps{list-style:none;display:flex;flex-wrap:wrap;gap:.5rem;margin:1.4rem 0 1.1rem;padding:0}
+.steps button{border:1.5px solid var(--line);background:var(--surface);padding:.5rem .85rem;border-radius:7px;font:600 .95rem var(--display)}
+.steps button[aria-current="step"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.tick{color:var(--good);margin-left:.3rem}
+.steps button[aria-current="step"] .tick{color:var(--mark)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:7px;padding:clamp(1rem,3vw,2rem)}
+.panel h2{font-size:1.5rem;margin-bottom:.75rem}
+.panel p{max-width:66ch}
+.big-why{font-size:1.2rem;line-height:1.6}
+.test{margin:1.5rem 0 0;padding:.9rem 1.1rem;border-left:6px solid var(--mark);background:var(--paper);max-width:66ch}
+.test strong{font-family:var(--display)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem 2rem;margin-top:1rem}
+.cols h3{font-size:1.05rem;margin-bottom:.4rem}
+.cols ul{margin:0;padding-left:1.15rem}
+.cols li{margin:.4rem 0}
+.pager{display:flex;justify-content:space-between;gap:.75rem;margin-top:1.5rem}
+
+.wrap{margin:.5rem 0 1rem}
+.wrap svg{display:block;width:100%;height:auto;max-width:720px;background:var(--surface);border:1px solid var(--line);border-radius:6px;touch-action:pan-y}
+.gl{stroke:var(--line);stroke-width:1}
+.ax{stroke:var(--ink);stroke-width:1.5}
+.tk{fill:var(--soft);font:12px var(--display)}
+.al{fill:var(--ink);font:600 13px var(--display)}
+.curve{fill:none;stroke:var(--ink);stroke-width:2.5}
+.sec{stroke:var(--cobalt);stroke-width:3;fill:none}
+.tan{stroke:var(--ink);stroke-width:2;stroke-dasharray:7 6;fill:none}
+.tri{stroke:var(--soft);stroke-width:1.5;stroke-dasharray:4 4;fill:none}
+.pt{fill:var(--mark);stroke:var(--ink);stroke-width:2;cursor:grab;touch-action:none}
+.pt:active{cursor:grabbing}
+.pfix{fill:var(--ink);stroke:var(--surface);stroke-width:2}
+.lab{fill:var(--ink);font:700 14px var(--display)}
+.annot{fill:var(--soft);font:13px var(--display)}
+.readout{font-family:var(--display);max-width:720px}
+.readout .eq{font-size:1.2rem;font-weight:600;margin:.2rem 0}
+.readout .sub{color:var(--soft);margin:.2rem 0}
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.9rem 1.5rem;max-width:720px;margin:.75rem 0}
+.controls label{display:block;font:600 .95rem var(--display);margin-bottom:.2rem}
+.controls input[type=range]{width:100%;accent-color:var(--cobalt)}
+.legend{list-style:none;display:flex;flex-wrap:wrap;gap:.4rem 1.4rem;margin:.6rem 0;padding:0;font:500 .9rem var(--display)}
+.legend li{display:flex;align-items:center;gap:.5rem}
+.legend svg{width:36px;height:10px;overflow:visible}
+.caption{color:var(--soft);font-size:.95rem;max-width:66ch;margin:.5rem 0 0}
+
+.qmeta{font:600 .9rem var(--display);color:var(--soft);margin:0 0 .4rem}
+.prompt{font-size:1.2rem;margin:.2rem 0 1rem}
+fieldset.q{border:0;padding:0;margin:1.25rem 0}
+fieldset.q legend{font:600 1rem var(--display);padding:0;margin-bottom:.35rem}
+.opt{display:flex;justify-content:space-between;align-items:center;gap:1rem;width:100%;text-align:left;margin:.5rem 0;padding:.8rem 1rem;background:var(--surface);color:var(--ink);border:1.5px solid var(--line);border-radius:7px;font:400 1.02rem/1.45 var(--body)}
+.opt:hover:not([disabled]){border-color:var(--cobalt)}
+.opt .tag{font:600 .85rem var(--display);white-space:nowrap}
+.opt.right{border-color:var(--good);background:var(--good-bg)}
+.opt.right .tag{color:var(--good)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.opt.wrong .tag{color:var(--bad)}
+.opt[disabled]{cursor:default;color:var(--ink)}
+.hint{font:500 .95rem var(--display);color:var(--bad);margin:.4rem 0 0}
+.explain{margin-top:1.25rem;padding:1rem 1.1rem;border:1.5px solid var(--good);background:var(--good-bg);border-radius:7px}
+.explain h3{font-size:1.05rem;margin-bottom:.3rem}
+.explain p{margin:0}
+.sum h2{font-size:1.6rem}
+
+.tablewrap{overflow-x:auto;margin:1rem 0}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.98rem}
+th,td{text-align:left;padding:.65rem .8rem;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 .9rem var(--display);color:var(--soft)}
+.talk{max-width:66ch}
+.talk li{margin:.6rem 0}
+.fine{color:var(--soft);font-size:.95rem;max-width:66ch}
+.danger{margin-top:2rem;padding-top:1rem;border-top:1px solid var(--line)}
+.codebox{display:inline-block;margin:.4rem 0 .6rem;padding:.6rem 1rem;border:2px dashed var(--ink);border-radius:7px;background:var(--surface);font:700 clamp(1.3rem,5vw,1.9rem) var(--display);letter-spacing:.08em;user-select:all}
+.field{display:block;margin:.7rem 0;font:600 .95rem var(--display)}
+.field input{display:block;margin-top:.25rem;width:100%;max-width:22rem;padding:.55rem .7rem;border:1.5px solid var(--ink);border-radius:7px;background:var(--surface);color:var(--ink);font:400 1.05rem var(--body)}
+code{font:500 .92em ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--surface);padding:.05em .35em;border-radius:4px}
+.stu{margin-top:2.25rem}
+.stu-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:.2rem 1rem}
+.stu-h h2{font-size:1.5rem}
+.stu-h .meta{color:var(--soft);font:500 .95rem var(--display)}
+.strip{fill:var(--mark);fill-opacity:.55;stroke:var(--ink);stroke-width:1}
+.solid{fill:var(--cobalt);fill-opacity:.14;stroke:none}
+.ring{fill:var(--mark);stroke:var(--ink);stroke-width:1.5}
+.disc{fill:var(--surface);stroke:var(--ink);stroke-width:2.5}
+.hole{fill:var(--surface);stroke:var(--ink);stroke-width:2.5}
+.mini{min-width:0;width:auto;font:500 .95rem var(--display);margin-top:.4rem}
+.mini th,.mini td{padding:.3rem .8rem;text-align:right}
+.mini th:first-child,.mini td:first-child{text-align:left;color:var(--soft)}
+.picks{display:flex;flex-wrap:wrap;gap:.5rem;margin:.25rem 0 1.1rem}
+.picks button{border:1.5px solid var(--line);background:var(--surface);padding:.45rem .8rem;border-radius:7px;font:600 .95rem var(--display)}
+.picks button[aria-checked="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.fn{font:700 clamp(1.5rem,4vw,2.1rem) var(--display);margin:.2rem 0 .9rem}
+.anat{display:flex;flex-wrap:wrap;align-items:flex-end;gap:.6rem}
+.piece{display:flex;flex-direction:column;border:2px solid var(--ink);border-radius:6px;padding:.35rem .9rem .5rem;background:var(--surface);font:600 1.25rem var(--display)}
+.plabel{font:500 .8rem var(--display);color:var(--soft)}
+.op{font:600 1rem var(--display);padding-bottom:.65rem;color:var(--soft)}
+.clue{margin:1rem 0 .6rem}
+.rulebox{border-left:6px solid var(--cobalt);background:var(--paper);padding:.7rem 1.1rem;margin:.6rem 0;max-width:66ch}
+.rulebox h3{font-size:1.1rem}
+.rulebox p{margin:.3rem 0}
+.formula{font:600 1.15rem var(--display)}
+.shows{color:var(--soft);max-width:66ch}
+.note{margin:1rem 0 0;padding:.6rem .9rem;border-left:5px solid var(--line);background:var(--surface);font:500 .95rem var(--display);max-width:66ch}
+
+@media (max-width:640px){
+  .lesson{grid-template-columns:1fr auto}
+  .lesson .chip{grid-column:1;justify-self:start}
+  .rail>li{padding-left:3.1rem}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="bar">
+    <button class="brand" data-act="home">Calculus for Engineers</button>
+    <nav class="nav" aria-label="Main">
+      <button id="nav-home" data-act="home">Course</button>
+      <button id="nav-parent" data-act="parent">Parent view</button>
+      <button id="nav-sync" data-act="sync">Family sync</button>
+    </nav>
+    <div class="tracks">
+      <span class="tlabel" id="tl">Track</span>
+      <div class="seg" role="radiogroup" aria-labelledby="tl">
+        <button role="radio" data-act="track" data-v="general">General</button>
+        <button role="radio" data-act="track" data-v="mechanical">Mechanical</button>
+        <button role="radio" data-act="track" data-v="civil">Civil</button>
+      </div>
+    </div>
+  </div>
+</header>
+<main id="app"><noscript>This app needs JavaScript turned on to run.</noscript></main>
+
+<script src="config.js"></script>
+<script>
+(function(){
+'use strict';
+var $=function(s,el){return (el||document).querySelector(s)};
+var $$=function(s,el){return Array.prototype.slice.call((el||document).querySelectorAll(s))};
+var reduce=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+/* ---------- Track context: axis names, units ---------- */
+var CTX={
+  general:{label:'General',x:'time (s)',y:'drone height (m)',xu:'s',yu:'m',unit:'m/s',lim:{x:'time (s)',y:'capacitor voltage (V)',xu:'s',yu:'V'}},
+  mechanical:{label:'Mechanical',x:'time (s)',y:'piston position (cm)',xu:'s',yu:'cm',unit:'cm/s',lim:{x:'time (s)',y:'part temperature (°C)',xu:'s',yu:'°C'}},
+  civil:{label:'Civil',x:'distance along road (km)',y:'road elevation (m)',xu:'km',yu:'m',unit:'m per km',lim:{x:'time (months)',y:'footing settlement (mm)',xu:'months',yu:'mm'}}
+};
+CTX.general.opt={mat:'fence',wu:'m',au:'m²'};
+CTX.mechanical.opt={mat:'wire',wu:'cm',au:'cm²'};
+CTX.civil.opt={mat:'fencing',wu:'m',au:'m²'};
+CTX.general.rel={what:'oil spill',ru:'m',tu:'min'};
+CTX.mechanical.rel={what:'weld pool',ru:'mm',tu:'s'};
+CTX.civil.rel={what:'wet patch around a leak',ru:'m',tu:'h'};
+CTX.general.mot={what:'elevator car',y:'elevator position (m)',pu:'m',vu:'m/s',au:'m/s²'};
+CTX.mechanical.mot={what:'piston',y:'piston position (cm)',pu:'cm',vu:'cm/s',au:'cm/s²'};
+CTX.civil.mot={what:'train',y:'train position (m)',pu:'m',vu:'m/s',au:'m/s²'};
+CTX.general.acc={x:'time (min)',y:'drone speed (m/min)',au:'m',what:'drone'};
+CTX.mechanical.acc={x:'time (h)',y:'motor power (kW)',au:'kWh',what:'motor'};
+CTX.civil.acc={x:'time (h)',y:'reservoir inflow (m³/h)',au:'m³',what:'reservoir'};
+CTX.general.btw={x:'x (m)',y:'y (m)',au:'m²',what:'land parcel'};
+CTX.mechanical.btw={x:'x (cm)',y:'y (cm)',au:'cm²',what:'cut-out plate'};
+CTX.civil.btw={x:'distance across (m)',y:'height (m)',au:'m²',what:'channel cross-section'};
+CTX.general.vol={u:'m',vu:'m³',what:'tank'};
+CTX.mechanical.vol={u:'cm',vu:'cm³',what:'shaft'};
+CTX.civil.vol={u:'m',vu:'m³',what:'funnel-shaped tank'};
+CTX.general.wrk={x:'stretch (m)',y:'spring force (N)',fu:'N',du:'m',wu:'J'};
+CTX.mechanical.wrk={x:'compression (cm)',y:'valve spring force (N)',fu:'N',du:'cm',wu:'N·cm'};
+CTX.civil.wrk={x:'compression (m)',y:'bearing spring force (kN)',fu:'kN',du:'m',wu:'kN·m'};
+CTX.general.crv={x:'time (h)',y:'temperature (°C)',what:'temperature curve'};
+CTX.mechanical.crv={x:'position along the beam (m)',y:'deflection (mm)',what:'deflection curve'};
+CTX.civil.crv={x:'distance along the road (km)',y:'road elevation (m)',what:'elevation curve'};
+CTX.general.lin={x:'speed (m/s)',y:'drone drag (N)',yu:'N'};
+CTX.mechanical.lin={x:'speed (m/s)',y:'kinetic energy of a 0.2 kg part (J)',yu:'J'};
+CTX.civil.lin={x:'wind speed (m/s)',y:'wind load (kN)',yu:'kN'};
+function get(v){return typeof v==='function'?v(CTX[state.track]):v}
+
+/* ---------- Course content ---------- */
+var UNITS=[
+  {id:1,title:'Foundations',blurb:'Functions, graphs, and how fast things change.',lessons:['slope']},
+  {id:2,title:'Limits',blurb:'Getting infinitely close to a value, which is what makes derivatives possible.',lessons:['limits']},
+  {id:3,title:'Derivatives',blurb:'The rate of change at a single instant, and the rules for finding it.',lessons:['deriv','rules']},
+  {id:4,title:'Applications of derivatives',blurb:'Optimization, related rates, motion, curve behavior, and linear approximation.',lessons:['optimize','related','motion','curve','linear']},
+  {id:5,title:'Integrals',blurb:'Adding up a changing quantity, and how it undoes a derivative.',lessons:['riemann','ftc','antider']},
+  {id:6,title:'Applications of integrals',blurb:'Area, volume, work, and total change.',lessons:['between','volume','total','work']}
+];
+
+function T3(g,m,c){return {general:g,mechanical:m,civil:c}}
+function ALL(t){return {general:t,mechanical:t,civil:t}}
+var ITYPE=['A derivative (find a rate)','An integral (add up a total)','Multiply (the rate is constant)','Average rate of change','Optimization'];
+var U6=['Area between two curves','Volume of a solid','Total change from a rate','Average value over an interval','Work done by a changing force'];
+var W_OPTS=['Integrate the force over the distance','Multiply force by distance (the force is constant)','Take a derivative'];
+var AFUNCS=[
+ {short:'x³',expr:'∫ x³ dx, from 0 to 2',rule:'Power rule, backward',formula:'∫ xⁿ dx = xⁿ⁺¹ ÷ (n + 1)',
+  work:'Add 1 to the power, then divide by the new power: x⁴ ÷ 4.',check:'Check: the derivative of x⁴ ÷ 4 is x³.',
+  evalu:'F(2) − F(0) = 16 ÷ 4 − 0',answer:'Total = 4',
+  ctx:{general:'A rate that grows with the cube of time.',mechanical:'A drag loss that grows with the cube of speed.',civil:'A load that grows with the cube of the span.'}},
+ {short:'4x + 1',expr:'∫ (4x + 1) dx, from 0 to 3',rule:'Sum, then the power rule backward',formula:'Integrate each piece on its own',
+  work:'4x becomes 2x², and 1 becomes x.',check:'Check: the derivative of 2x² + x is 4x + 1.',
+  evalu:'F(3) − F(0) = (18 + 3) − 0',answer:'Total = 21',
+  ctx:{general:'A speed that ramps up steadily from a base speed.',mechanical:'A motor’s power that ramps up steadily from idle.',civil:'An inflow that ramps up steadily from a base flow.'}},
+ {short:'3x²',expr:'∫ 3x² dx, from 1 to 2',rule:'Power rule, backward',formula:'∫ xⁿ dx = xⁿ⁺¹ ÷ (n + 1)',
+  work:'x² becomes x³ ÷ 3, so 3x² becomes x³.',check:'Check: the derivative of x³ is 3x².',
+  evalu:'F(2) − F(1) = 8 − 1',answer:'Total = 7',
+  ctx:{general:'A rate that grows with the square of time.',mechanical:'Kinetic power loss that grows with the square of speed.',civil:'A pressure load that grows with the square of wind speed.'}},
+ {short:'x²',expr:'∫ x² dx, from 0 to 3',rule:'Power rule, backward',formula:'∫ xⁿ dx = xⁿ⁺¹ ÷ (n + 1)',
+  work:'x² becomes x³ ÷ 3.',check:'Check: the derivative of x³ ÷ 3 is x².',
+  evalu:'F(3) − F(0) = 27 ÷ 3 − 0',answer:'Total = 9',
+  ctx:{general:'Distance fallen when speed grows steadily.',mechanical:'Energy stored as a spring’s force ramps up.',civil:'Settlement when the load ramps up steadily.'}},
+ {short:'2x(x² + 1)³',expr:'∫ 2x(x² + 1)³ dx, from 0 to 1',rule:'Chain rule, backward',formula:'Look for a function and the derivative of its inside side by side',
+  work:'The inside is x² + 1, and its derivative, 2x, sits right next to it. So the antiderivative is (x² + 1)⁴ ÷ 4.',check:'Check: the derivative of (x² + 1)⁴ ÷ 4 is (x² + 1)³ · 2x.',
+  evalu:'F(1) − F(0) = 2⁴ ÷ 4 − 1 ÷ 4 = 4 − 0.25',answer:'Total = 3.75',
+  ctx:{general:'A rate that depends on a quantity which itself depends on time.',mechanical:'A power draw that depends on a speed which itself changes with time.',civil:'A load that depends on a depth which itself changes with time.'}}
+];
+var PTYPE=['Optimization','Related rates','Motion','A plain derivative at a point','Average rate of change'];
+var LTYPE=['Linear approximation (use the tangent line)','Optimization','Related rates','Average rate of change','An integral (add up a total)'];
+var RULE_OPTS=['Power rule','Sum and constant multiple','Product rule','Quotient rule','Chain rule'];
+var RFUNCS=[
+ {short:'x³',expr:'f(x) = x³',
+  pieces:[{t:'x',label:'a variable'},{op:'raised to'},{t:'3',label:'a number'}],
+  clue:'A variable raised to a number.',rule:'Power rule',formula:'(xⁿ)′ = n · xⁿ⁻¹',
+  work:'Bring the power down in front, then lower the power by 1.',answer:'f′(x) = 3x²',
+  ctx:{general:'The volume of a cube grows as its side cubed.',mechanical:'The deflection of a cantilever arm grows with the cube of its length.',civil:'A beam’s deflection grows with the cube of its span.'}},
+ {short:'3x⁴ + 2x',expr:'f(x) = 3x⁴ + 2x',
+  pieces:[{t:'3x⁴',label:'piece 1'},{op:'+'},{t:'2x',label:'piece 2'}],
+  clue:'Pieces added together, each possibly scaled by a number.',rule:'Sum and constant multiple',formula:'(a·u + b·v)′ = a·u′ + b·v′',
+  work:'Differentiate each piece on its own. The multiplier rides along. 3x⁴ becomes 3 · 4x³, and 2x becomes 2.',answer:'f′(x) = 12x³ + 2',
+  ctx:{general:'A cost made of a scaled fast-growing term plus a steady term.',mechanical:'Radiated heat grows with temperature to the fourth power, plus a steady loss by conduction.',civil:'Wind load that grows fast with height, plus a steady dead load.'}},
+ {short:'x²(3x + 1)',expr:'f(x) = x²(3x + 1)',
+  pieces:[{t:'x²',label:'u'},{op:'×'},{t:'3x + 1',label:'v'}],
+  clue:'Two changing things multiplied.',rule:'Product rule',formula:'(u · v)′ = u′ · v + u · v′',
+  work:'Here u′ = 2x and v′ = 3. So the derivative is 2x(3x + 1) + x² · 3.',answer:'f′(x) = 9x² + 2x',
+  ctx:{general:'An area that changes times a height that changes.',mechanical:'Power as force times speed, when both change.',civil:'Weight as a changing area times a changing depth.'}},
+ {short:'(x² + 1) ÷ (x − 3)',expr:'f(x) = (x² + 1) ÷ (x − 3)',
+  pieces:[{t:'x² + 1',label:'top, u'},{op:'÷'},{t:'x − 3',label:'bottom, v'}],
+  clue:'One changing thing divided by another.',rule:'Quotient rule',formula:'(u ÷ v)′ = (u′ · v − u · v′) ÷ v²',
+  work:'Here u′ = 2x and v′ = 1. So the derivative is [2x(x − 3) − (x² + 1) · 1] ÷ (x − 3)².',answer:'f′(x) = (x² − 6x − 1) ÷ (x − 3)²',
+  ctx:{general:'One changing amount divided by another.',mechanical:'Pressure as force divided by a changing area.',civil:'Stress as load divided by a changing cross-section.'}},
+ {short:'(2x + 1)⁴',expr:'f(x) = (2x + 1)⁴',
+  pieces:[{t:'( ▢ )⁴',label:'outer function'},{op:'wrapped around'},{t:'2x + 1',label:'inside function'}],
+  clue:'A function tucked inside another function.',rule:'Chain rule',formula:'(outer(inner))′ = outer′(inner) · inner′',
+  work:'Differentiate the outer function first and leave the inside alone: 4(2x + 1)³. Then multiply by the derivative of the inside, which is 2.',answer:'f′(x) = 8(2x + 1)³',
+  ctx:{general:'A reading that depends on temperature, which itself depends on time.',mechanical:'A gear-train output that depends on an input that changes with time.',civil:'Settlement that depends on load, which depends on time.'}}
+];
+var LESSONS=[
+{
+  id:'slope',unit:1,title:'Slope is rate of change',
+  summary:'How much the output changes for each unit of input.',
+  why:{
+    general:'Engineers keep asking how much one thing changes when another does: how far a drone climbs each second, how much a battery drains each hour. Slope is the single number that answers that. Without it you would have a pile of readings and no fair way to compare them.',
+    mechanical:'A mechanical engineer asks how far a piston travels each second, or how fast a part heats up. Slope is the single number that answers it, and it lets you compare designs on equal terms: centimeters per second, not just centimeters.',
+    civil:'A civil engineer asks how steeply a road climbs, because grade decides whether a loaded truck can make the hill and where the rainwater runs. Slope is the single number that answers it: meters of rise for each kilometer of road.'
+  },
+  visual:'slope',
+  caption:'Drag point A and point B, or focus a point and use the arrow keys. The dashed triangle shows rise and run. Slope is rise ÷ run.',
+  use:[
+    'The problem says “per”: per second, per kilometer, per ton.',
+    'You have two readings and want the rate between them.',
+    'It asks how steep something is, or how fast it changes on average.'
+  ],
+  notuse:[
+    'It names one exact instant or point. That calls for a derivative, in Unit 3.',
+    'It asks for a total, not a rate. That calls for an integral, in Unit 5.'
+  ],
+  test:'Can I draw a straight line between two points and read off how steep it is? Then use slope.',
+  questions:[
+    {id:'s1',topic:'Subtracting before dividing',
+     talk:'Ask them why we subtract the two readings first and then divide, instead of using the totals.',
+     prompt:{
+       general:'A drone climbs from 20 m to 80 m in 5 s. What is its average climb rate?',
+       mechanical:'A piston moves from 20 cm to 80 cm in 5 s. What is its average speed?',
+       civil:'A road rises from 20 m of elevation to 80 m over 5 km. What is its average grade?'},
+     s1:{label:'Step 1: What is the rate?',opts:function(c){return ['20 '+c.unit,'12 '+c.unit,'4 '+c.unit]},correct:1},
+     s2:{label:'Step 2: Why is that the right calculation?',opts:[
+       'Change in the output divided by change in the input',
+       'Add the two outputs, then divide by the change in input',
+       'Take the starting output and divide by the change in input'],correct:0},
+     explain:function(c){return 'Rise is 80 − 20 = 60. Run is 5. Slope = rise ÷ run = 60 ÷ 5 = 12 '+c.unit+'. Subtract first: a rate describes the change, not the totals.'}},
+    {id:'s2',topic:'Comparing slopes',
+     talk:'Ask what a bigger slope tells you about how quickly something responds.',
+     prompt:{
+       general:'Drone A has a climb rate of 2 m/s and Drone B has 5 m/s. Which one gains height faster?',
+       mechanical:'Piston A moves at 2 cm/s and Piston B at 5 cm/s. Which one moves faster?',
+       civil:'Road A has a grade of 2 m per km and Road B has 5 m per km. Which one climbs more steeply?'},
+     s1:{label:'Step 1: Which one?',opts:['A','B','They are the same'],correct:1},
+     s2:{label:'Step 2: Why?',opts:[
+       'The one that starts higher always changes faster',
+       'A larger slope means more output change for each unit of input',
+       'The shorter graph changes faster'],correct:1},
+     explain:function(){return 'Slope is output change per unit of input, so a bigger slope means a faster change. Where a graph starts says nothing about how fast it changes.'}},
+    {id:'s3',topic:'Negative slopes',
+     talk:'Ask what a negative slope means in the real situation (something dropping).',
+     prompt:{
+       general:'A drone’s height drops from 90 m to 60 m over 6 s. What is its slope?',
+       mechanical:'A piston’s position drops from 90 cm to 60 cm over 6 s. What is its slope?',
+       civil:'A road’s elevation falls from 90 m to 60 m over 6 km. What is its slope?'},
+     s1:{label:'Step 1: What is the slope?',opts:function(c){return ['5 '+c.unit,'−15 '+c.unit,'−5 '+c.unit]},correct:2},
+     s2:{label:'Step 2: Why is it negative?',opts:[
+       'A falling output gives a negative change, so the slope is negative',
+       'Slope can’t be negative, so the minus sign gets dropped',
+       'Divide the starting value by the run instead'],correct:0},
+     explain:function(c){return 'Rise is 60 − 90 = −30. Run is 6. Slope = −30 ÷ 6 = −5 '+c.unit+'. A negative slope means the output drops as the input grows.'}}
+  ]
+},
+{
+  id:'limits',unit:2,title:'What a limit is',
+  summary:'What a value is heading toward, even when you can’t plug the point in.',
+  why:{
+    general:'The last lesson left a puzzle: the slope at one point needs a gap of zero, and 0 ÷ 0 means nothing. Limits fix that. A limit asks what a value is heading toward as the input closes in, even when you can’t plug the point in.',
+    mechanical:'Engineers rarely care what a part’s temperature is at some infinitely late time. They care what it settles toward. A limit answers that, and it also rescues formulas that break at a single point.',
+    civil:'A footing keeps settling a little more each month, yet an engineer needs its final settlement. A limit gives that final value, and it also handles formulas that break at one point.'
+  },
+  visual:'limit',
+  caption:'In “Close in on a point”, slide x toward 2 from either side. f(x) = (x² − 4) ÷ (x − 2) breaks at 2, but nearby values head to 4. In “Look far out”, watch a value settle toward its limit.',
+  use:[
+    'The problem says “approaches”, “as x gets close to”, or “in the long run”.',
+    'Plugging the point in gives 0 ÷ 0 or something undefined, but the nearby values show a clear pattern.',
+    'You want the steady value something settles toward.'
+  ],
+  notuse:[
+    'The function is fine at that point. Just plug in the value.',
+    'You want how fast something changes. That is a derivative, in Unit 3.',
+    'You want a total. That calls for an integral, in Unit 5.'
+  ],
+  test:'Ask what the output is heading toward as the input closes in, not what it equals right at the point.',
+  questions:[
+    {id:'m1',topic:'Settling toward a value',
+     talk:'Ask what “heading toward” means, and why the readings don’t have to reach the value.',
+     prompt:{
+       general:'A capacitor’s voltage reads 3.15 V, 7.34 V, 7.95 V, and 7.9996 V at 1, 5, 10, and 20 s. What value is it heading toward?',
+       mechanical:'A part’s temperature above ambient reads 3.15 °C, 7.34 °C, 7.95 °C, and 7.9996 °C at 1, 5, 10, and 20 s. What value is it heading toward?',
+       civil:'A footing’s settlement reads 3.15 mm, 7.34 mm, 7.95 mm, and 7.9996 mm at 1, 5, 10, and 20 months. What value is it heading toward?'},
+     s1:{label:'Step 1: What is the limit?',opts:function(c){return ['7.9996 '+c.lim.yu,'8 '+c.lim.yu,'It grows without limit']},correct:1},
+     s2:{label:'Step 2: Why?',opts:[
+       'The readings keep growing past any number',
+       'The values get closer and closer to 8 without needing to reach it',
+       'Only the last reading counts'],correct:1},
+     explain:function(){return 'The gaps to 8 are about 4.85, 0.66, 0.05, and 0.0004, so they shrink toward zero. A limit is the value the readings close in on, whether or not they ever reach it.'}},
+    {id:'m2',topic:'Zero over zero is not the end',
+     talk:'Ask why plugging in gives 0 ÷ 0, and what simplifying first reveals.',
+     prompt:{
+       general:'A gain ratio is f(x) = (x² − 4) ÷ (x − 2). What does f(x) approach as x approaches 2?',
+       mechanical:'A stress ratio is f(x) = (x² − 4) ÷ (x − 2). What does f(x) approach as x approaches 2?',
+       civil:'A load factor is f(x) = (x² − 4) ÷ (x − 2). What does f(x) approach as x approaches 2?'},
+     s1:{label:'Step 1: What is the limit?',opts:['0','4','It doesn’t exist because f(2) is undefined'],correct:1},
+     s2:{label:'Step 2: Why?',opts:[
+       'Plug in 2 and read the answer',
+       'Factor and cancel: (x − 2)(x + 2) ÷ (x − 2) = x + 2, which heads to 4',
+       'Any 0 ÷ 0 equals 0'],correct:1},
+     explain:function(){return 'Plugging in gives 0 ÷ 0, which tells you nothing. But for every x except 2, the fraction simplifies to x + 2, and that heads to 4. A missing point doesn’t stop the limit from existing.'}},
+    {id:'m3',topic:'Both sides must agree',
+     talk:'Ask why a jump means there is no single limit, even though each side heads somewhere.',
+     prompt:{
+       general:'A circuit’s output approaches 5 V as time approaches 3 s from before, but approaches 7 V from after. Does a single limit exist at t = 3 s?',
+       mechanical:'A valve’s pressure approaches 5 bar as time approaches 3 s from before, but 7 bar from after. Does a single limit exist at t = 3 s?',
+       civil:'A road’s elevation approaches 5 m from one side of a bridge joint at the 3 km mark, but 7 m from the other side. Does a single limit exist at 3 km?'},
+     s1:{label:'Step 1: Does it exist?',opts:['Yes, it is 5','Yes, it is 7','No'],correct:2},
+     s2:{label:'Step 2: Why?',opts:[
+       'Both sides have to head toward the same value',
+       'The bigger value wins',
+       'The limit is the average of 5 and 7'],correct:0},
+     explain:function(){return 'A limit exists only when the output heads toward the same value from both sides. A jump like this means there is no single limit at that point.'}},
+    {id:'m4',topic:'Limit versus the value at the point',
+     talk:'Ask why a glitch exactly at the point doesn’t change what the nearby values are heading toward.',
+     prompt:{
+       general:'A sensor glitches to 10 at exactly t = 2 s, but readings just before and after approach 4. What is the limit as t approaches 2 s?',
+       mechanical:'A strain gauge glitches to 10 at exactly t = 2 s, but readings just before and after approach 4. What is the limit as t approaches 2 s?',
+       civil:'A survey marker at the 2 km mark was mis-recorded as 10 m, but nearby elevations approach 4 m. What is the limit as the distance approaches 2 km?'},
+     s1:{label:'Step 1: What is the limit?',opts:['10','4','7'],correct:1},
+     s2:{label:'Step 2: Why?',opts:[
+       'The value at the point always wins',
+       'Take the average of the glitch and the pattern',
+       'A limit looks at the nearby values, not the value at the point itself'],correct:2},
+     explain:function(){return 'A limit only cares about what the output heads toward nearby. The glitch of 10 at the point doesn’t change the limit of 4.'}}
+  ]
+},
+{
+  id:'deriv',unit:3,title:'What a derivative is',
+  summary:'The rate of change at one exact point, and when to reach for it.',
+  why:{
+    general:'Average speed needs two moments: a start and an end. But a speedometer shows your speed at one instant, with no time passing at all. The derivative is the tool built for that: the rate of change at a single point, found by shrinking the gap between two points toward zero.',
+    mechanical:'A piston’s speed at one exact moment can’t be found by dividing distance by time, because at one moment no time passes. Engineers need that exact value to size the forces on the rod. The derivative gives it: the slope at a single point, found by shrinking a gap toward zero.',
+    civil:'A road’s grade changes along its length, and a designer cares about the steepest spot, not the average. Dividing rise by run over a long stretch hides it. The derivative gives the steepness at one exact point, found by shrinking a gap toward zero.'
+  },
+  visual:'secant',
+  caption:'Point P stays put. Point Q slides toward it as you shrink h. Watch the blue line turn into the dashed tangent.',
+  use:[
+    'The wording names one exact moment or point: “at exactly t = 3”, “right now”, “at this mark”.',
+    'It asks how sensitive an output is to a tiny nudge in the input.',
+    'You have a formula for the quantity, and the question is about one spot on it.'
+  ],
+  notuse:[
+    'It gives two readings or two times. That is an average rate: use slope.',
+    'It asks for a total or an area. That calls for an integral, in Unit 5.',
+    'A formula alone doesn’t settle it. Read the wording: one point or two?'
+  ],
+  test:'Does the question name one point, or two? One point means derivative. Two means average rate.',
+  questions:[
+    {id:'d1',topic:'One instant means derivative',
+     talk:'Ask which words in a problem point to a single instant, such as “at exactly” or “right now”.',
+     prompt:{
+       general:'A drone’s height is given by h(t). How fast is it climbing at exactly t = 3 s?',
+       mechanical:'A piston’s position is given by x(t). What is its speed at exactly t = 3 s?',
+       civil:'A road’s elevation is given by e(d). How steep is it at exactly the 3 km mark?'},
+     s1:{label:'Step 1: Which tool fits?',opts:['Average rate of change (slope between two points)','Derivative (rate at one point)'],correct:1},
+     s2:{label:'Step 2: Why?',opts:[
+       'The question is about one instant, not a stretch of time',
+       'The question gives two readings to compare',
+       'The answer has to be a total'],correct:0},
+     explain:function(){return '“At exactly” points to a single instant. The derivative is the rate at one point, found by shrinking the gap between two points toward zero.'}},
+    {id:'d2',topic:'Two readings mean an average',
+     talk:'Ask why two readings give an average rate and not the rate at one moment.',
+     prompt:{
+       general:'A drone is at 20 m when t = 0 s and at 80 m when t = 5 s. How fast did it climb, on average?',
+       mechanical:'A piston is at 20 cm when t = 0 s and at 80 cm when t = 5 s. What was its average speed?',
+       civil:'A road is at 20 m elevation at the 0 km mark and 80 m at the 5 km mark. What is its average grade?'},
+     s1:{label:'Step 1: Which tool fits?',opts:['Average rate of change (slope between two points)','Derivative (rate at one point)'],correct:0},
+     s2:{label:'Step 2: Why?',opts:[
+       'The question wants a total',
+       'Two readings give a stretch of input, so divide the change by the gap',
+       'One instant is being asked about'],correct:1},
+     explain:function(c){return 'Two readings mean an interval. Average rate = change in output ÷ change in input = 60 ÷ 5 = 12 '+c.unit+'.'}},
+    {id:'d3',topic:'Spotting “right now”',
+     talk:'Ask how “right now” is different from “on average over the last hour”.',
+     prompt:{
+       general:'A battery’s charge is given by c(t). How fast is it draining right now?',
+       mechanical:'A part’s temperature is given by T(t). How fast is it heating up right now?',
+       civil:'The soil under a footing settles by s(t). How fast is it settling right now?'},
+     s1:{label:'Step 1: Which tool fits?',opts:['Average rate of change (slope between two points)','Derivative (rate at one point)'],correct:1},
+     s2:{label:'Step 2: Why?',opts:[
+       'Two readings were given',
+       'A total is wanted',
+       '“Right now” means one moment, so we need the rate at a point'],correct:2},
+     explain:function(){return '“Right now” is one moment. We have a formula, so we can ask for the rate at that exact point. That is a derivative.'}},
+    {id:'d4',topic:'A formula doesn’t pick the tool',
+     talk:'Ask why having a formula doesn’t automatically mean using a derivative.',
+     prompt:{
+       general:'A drone’s height is h(t). What is its average climb rate between t = 2 s and t = 5 s?',
+       mechanical:'A piston’s position is x(t). What is its average speed between t = 2 s and t = 5 s?',
+       civil:'A road’s elevation is e(d). What is its average grade between the 2 km and 5 km marks?'},
+     s1:{label:'Step 1: Which tool fits?',opts:['Average rate of change (slope between two points)','Derivative (rate at one point)'],correct:0},
+     s2:{label:'Step 2: Why?',opts:[
+       'The question names two points, so it is about a stretch, even though we have a formula',
+       'A formula always means a derivative',
+       'Averages only work on graphs, never on formulas'],correct:0},
+     explain:function(){return 'A formula doesn’t decide the tool. The wording does. Two points mean an interval, so use an average rate. “At one exact point” means derivative.'}}
+  ]
+},
+{
+  id:'rules',unit:3,title:'Which rule, and when',
+  summary:'Read the shape of a function and pick the right derivative rule.',
+  why:{
+    general:'Once you know what a derivative means, the next problem is practical: how do you find one without sliding points around? A handful of rules cover almost everything, and each is built for one shape of function. The skill that matters is spotting the shape.',
+    mechanical:'A real model, like power equal to force times speed, hands you a formula with several parts stuck together. Finding its derivative by sliding points would take forever. A few rules do it instantly, if you can tell which shape you’re looking at.',
+    civil:'A deflection or load formula usually combines several shapes: powers, fractions, parts inside parts. There is one rule for each shape, and choosing the wrong one is the most common mistake. Learning to read the shape comes first, and the algebra second.'
+  },
+  visual:'rules',
+  caption:'Pick a function. See how it is built, which clue gives its rule away, and how the rule works.',
+  use:[
+    'A variable raised to a number, like x⁶: power rule.',
+    'Pieces added or subtracted, or scaled by a number: handle each piece on its own.',
+    'Two changing things multiplied: product rule.',
+    'One changing thing divided by another: quotient rule.',
+    'A function tucked inside another, like (3x + 2)⁵: chain rule.'
+  ],
+  notuse:[
+    'Look at the outermost operation first. It picks the rule to start with, and the inner pieces get their own rules after.',
+    'If the problem asks for a total or an area, that is an integral (Unit 5).',
+    'If the problem asks for an average rate between two points, you don’t need a derivative at all.'
+  ],
+  test:'What is the last thing done to x? That outermost step picks the rule.',
+  questions:[
+    {id:'r1',topic:'Spotting a power',
+     talk:'Ask what clue tells you the power rule is enough for x⁶.',
+     prompt:{
+       general:'A cost model grows as f(x) = x⁶ with project size x. Which rule do you start with to find how fast cost changes?',
+       mechanical:'A wear model grows as f(x) = x⁶ with speed x. Which rule do you start with to find how fast wear changes?',
+       civil:'A deflection model grows as f(x) = x⁶ with span x. Which rule do you start with to find how fast deflection changes?'},
+     s1:{label:'Step 1: Which rule?',opts:RULE_OPTS,correct:0},
+     s2:{label:'Step 2: Why?',opts:[
+       'A variable is raised to a number',
+       'Two changing things are multiplied',
+       'A function sits inside another function'],correct:0},
+     explain:function(){return 'The only thing happening to x is being raised to a number, so the power rule is enough: bring the 6 down and lower the power by 1. f′(x) = 6x⁵.'}},
+    {id:'r2',topic:'Two changing things multiplied',
+     talk:'Ask how they can tell two changing pieces are being multiplied.',
+     prompt:{
+       general:'Output is a changing width times a changing height: f(x) = (x² + 3)(4x − 1). Which rule do you start with?',
+       mechanical:'Power is force times speed, and both change with x: f(x) = (x² + 3)(4x − 1). Which rule do you start with?',
+       civil:'Load is area times depth, and both change with x: f(x) = (x² + 3)(4x − 1). Which rule do you start with?'},
+     s1:{label:'Step 1: Which rule?',opts:RULE_OPTS,correct:2},
+     s2:{label:'Step 2: Why?',opts:[
+       'One changing thing is divided by another',
+       'Two changing things are multiplied',
+       'Pieces are added together'],correct:1},
+     explain:function(){return 'The outermost operation is multiplying two changing pieces, so use the product rule: (u·v)′ = u′·v + u·v′. Here u′ = 2x and v′ = 4, giving 2x(4x − 1) + 4(x² + 3) = 12x² − 2x + 12.'}},
+    {id:'r3',topic:'A function inside a function',
+     talk:'Ask why (3x + 2)⁵ isn’t just a power of x.',
+     prompt:{
+       general:'A reading depends on 3x + 2 raised to the 5th power: f(x) = (3x + 2)⁵. Which rule do you start with?',
+       mechanical:'A gear-train output follows f(x) = (3x + 2)⁵. Which rule do you start with?',
+       civil:'A settlement model follows f(x) = (3x + 2)⁵. Which rule do you start with?'},
+     s1:{label:'Step 1: Which rule?',opts:RULE_OPTS,correct:4},
+     s2:{label:'Step 2: Why?',opts:[
+       'A function sits inside another: 3x + 2 is inside the 5th power',
+       'It is a variable raised to a number',
+       'It is a product of two pieces'],correct:0},
+     explain:function(){return 'The power applies to a whole expression, 3x + 2, not just to x. Outer function: something to the 5th. Inner function: 3x + 2. Chain rule: 5(3x + 2)⁴ · 3 = 15(3x + 2)⁴.'}},
+    {id:'r4',topic:'One changing thing divided by another',
+     talk:'Ask what is different about a fraction where the bottom changes too.',
+     prompt:{
+       general:'A ratio of two changing quantities: f(x) = (x + 4) ÷ (x² − 1). Which rule do you start with?',
+       mechanical:'Pressure is force over a changing area: f(x) = (x + 4) ÷ (x² − 1). Which rule do you start with?',
+       civil:'Stress is load over a changing cross-section: f(x) = (x + 4) ÷ (x² − 1). Which rule do you start with?'},
+     s1:{label:'Step 1: Which rule?',opts:RULE_OPTS,correct:3},
+     s2:{label:'Step 2: Why?',opts:[
+       'Pieces are added',
+       'One changing thing is divided by another',
+       'A function sits inside another'],correct:1},
+     explain:function(){return 'The outermost operation is dividing one changing expression by another: quotient rule, (u/v)′ = (u′v − uv′) ÷ v². With u = x + 4 and v = x² − 1 you get [1·(x² − 1) − (x + 4)·2x] ÷ (x² − 1)² = (−x² − 8x − 1) ÷ (x² − 1)².'}},
+    {id:'r5',topic:'Sums and constants',
+     talk:'Ask what happens to a lone number like 9 when you take a derivative, and why.',
+     prompt:{
+       general:'Total cost is f(x) = 2x⁵ − 7x² + 9. Which rule do you start with?',
+       mechanical:'Net heat load is f(x) = 2x⁵ − 7x² + 9. Which rule do you start with?',
+       civil:'Total load is f(x) = 2x⁵ − 7x² + 9. Which rule do you start with?'},
+     s1:{label:'Step 1: Which rule?',opts:RULE_OPTS,correct:1},
+     s2:{label:'Step 2: Why?',opts:[
+       'Two pieces are multiplied',
+       'Several pieces are added or subtracted, each scaled by a number',
+       'One piece is divided by another'],correct:1},
+     explain:function(){return 'The outermost operation is adding and subtracting pieces. Take each piece on its own: the multiplier rides along, and a lone number disappears. f′(x) = 10x⁴ − 14x.'}},
+    {id:'r6',topic:'Outermost operation first',
+     talk:'Ask how they decide which rule goes first when more than one could apply.',
+     prompt:{
+       general:'A model multiplies x² by (x + 1)³: f(x) = x²(x + 1)³. Which rule do you start with?',
+       mechanical:'A stress model multiplies x² by (x + 1)³: f(x) = x²(x + 1)³. Which rule do you start with?',
+       civil:'A load model multiplies x² by (x + 1)³: f(x) = x²(x + 1)³. Which rule do you start with?'},
+     s1:{label:'Step 1: Which rule first?',opts:RULE_OPTS,correct:2},
+     s2:{label:'Step 2: Why?',opts:[
+       'There is a power, so the power rule always comes first',
+       'The outermost operation is multiplying x² by (x + 1)³',
+       'Parentheses always mean the chain rule comes first'],correct:1},
+     explain:function(){return 'Check the outermost operation first: x² is multiplied by (x + 1)³, so start with the product rule. Inside it, (x + 1)³ needs the chain rule to get v′ = 3(x + 1)². Rules often nest, and the outside one comes first.'}}
+  ]
+},
+{
+  id:'optimize',unit:4,title:'Optimization: finding the best',
+  summary:'Use the slope to find the biggest, smallest, or best value.',
+  why:{
+    general:'Engineers are always asked for the best: the most area for the least fence, the lowest cost, the strongest shape. Testing every option wastes time. A derivative finds the best one directly, because at a peak or a valley the slope is zero for an instant.',
+    mechanical:'Parts get designed for the least material, the lowest heat loss, the highest efficiency. Testing every size by hand doesn’t scale. At the best size the slope of the curve is zero, and the derivative finds exactly that spot.',
+    civil:'Every project wants the most capacity for the least cost: the most lot area from a fixed length of fence, the cheapest cross-section that carries the load. At the best choice the slope of the area or cost curve is zero, so the derivative points straight to it.'
+  },
+  visual:'opt',
+  caption:'A fixed perimeter of 20 wraps a rectangle. Slide the width and watch the area. The dashed line is the slope of the area curve at that width. Find where it goes flat.',
+  use:[
+    'The problem says “largest”, “smallest”, “best”, “least material”, or “lowest cost”.',
+    'You have a fixed amount of something to spend, like fence, wire, or budget.',
+    'You can write the quantity as a formula in one variable.'
+  ],
+  notuse:[
+    'It gives two readings and wants the rate between them. That is an average rate.',
+    'It links two changing rates through an equation. That is related rates, the next lesson.',
+    'It asks how fast something changes at one exact moment, not for a best value. That is a plain derivative.'
+  ],
+  test:'Does the problem ask for the biggest or smallest value of something? Then set the derivative to zero, solve, and check what you found.',
+  questions:[
+    {id:'o1',topic:'Spotting an optimization problem',
+     talk:'Ask which words in a problem say “find the best value”, like largest, smallest, or least.',
+     prompt:{
+       general:'You have 20 m of fence and want the rectangular pen with the largest area. What kind of problem is this?',
+       mechanical:'You have 20 cm of wire and want the rectangular frame that encloses the most area. What kind of problem is this?',
+       civil:'You have 20 m of fencing and want the rectangular lot with the most area. What kind of problem is this?'},
+     s1:{label:'Step 1: Which kind?',opts:PTYPE,correct:0},
+     s2:{label:'Step 2: Why?',opts:[
+       'The wording asks for the largest value of something',
+       'Two readings are given',
+       'One rate is linked to another rate by an equation'],correct:0},
+     explain:function(){return '“Largest” is the clue. The problem asks for the best value of a quantity, which is optimization: write the quantity as a formula, set its derivative to zero, and check that point.'}},
+    {id:'o2',topic:'Zero slope at the best point',
+     talk:'Ask why the slope has to be zero at the top of a peak.',
+     prompt:{
+       general:'A smooth curve of area against width has its highest point at one width. What is true about its slope there?',
+       mechanical:'A smooth curve of heat loss against wall thickness has its lowest point at one thickness. What is true about its slope there?',
+       civil:'A smooth curve of cost against beam depth has its lowest point at one depth. What is true about its slope there?'},
+     s1:{label:'Step 1: What is the slope?',opts:['Zero','As steep as possible','Equal to 1'],correct:0},
+     s2:{label:'Step 2: Why?',opts:[
+       'Steepest means best',
+       'At a peak or valley the curve levels off for an instant',
+       'A turning point always has a slope of 1'],correct:1},
+     explain:function(){return 'Going up toward a peak the slope is positive, and after the peak it is negative. In between it has to pass through zero. That is why setting the derivative to zero finds the best point.'}},
+    {id:'o3',topic:'Solving for the best value',
+     talk:'Ask them to explain each step: write the formula, differentiate, set it to zero, solve.',
+     prompt:{
+       general:'With 20 m of fence all the way around, the pen’s area is A(w) = w(10 − w), so dA/dw = 10 − 2w. Which width gives the largest area?',
+       mechanical:'With 20 cm of wire all the way around, the frame’s area is A(w) = w(10 − w), so dA/dw = 10 − 2w. Which width gives the largest area?',
+       civil:'With 20 m of fencing all the way around, the lot’s area is A(w) = w(10 − w), so dA/dw = 10 − 2w. Which width gives the largest area?'},
+     s1:{label:'Step 1: Which width?',opts:function(c){return ['2.5 '+c.opt.wu,'5 '+c.opt.wu,'10 '+c.opt.wu]},correct:1},
+     s2:{label:'Step 2: How do you get it?',opts:[
+       'Pick the largest width allowed',
+       'Set A(w) = 0 and solve',
+       'Set dA/dw = 0 and solve: 10 − 2w = 0'],correct:2},
+     explain:function(c){return 'Set the derivative to zero: 10 − 2w = 0, so w = 5 '+c.opt.wu+'. The other side is also 10 − 5 = 5, so the best rectangle is a square with area 25 '+c.opt.au+'.'}},
+    {id:'o4',topic:'Two readings are not optimization',
+     talk:'Ask why two readings and an average rate are a different kind of problem from finding a best value.',
+     prompt:{
+       general:'A pump’s pressure reads 20 kPa at t = 2 s and 50 kPa at t = 5 s. How fast did the pressure rise on average? What kind of problem is this?',
+       mechanical:'A bearing’s temperature reads 20 °C at t = 2 s and 50 °C at t = 5 s. How fast did it heat up on average? What kind of problem is this?',
+       civil:'A footing’s settlement reads 20 mm at 2 months and 50 mm at 5 months. How fast did it settle on average? What kind of problem is this?'},
+     s1:{label:'Step 1: Which kind?',opts:PTYPE,correct:4},
+     s2:{label:'Step 2: Why?',opts:[
+       'The wording asks for the smallest value',
+       'No best value is asked for, just the rate between two readings',
+       'Two linked rates are involved'],correct:1},
+     explain:function(){return 'Two readings mean an average rate: (50 − 20) ÷ (5 − 2) = 10 per unit of time. Nothing asks for a best value, so this isn’t optimization.'}}
+  ]
+},
+{
+  id:'related',unit:4,title:'Related rates: linked changes',
+  summary:'When two changing quantities are tied by an equation, one rate gives you the other.',
+  why:{
+    general:'Sometimes you can’t measure the thing you care about directly, but you can measure something linked to it. An oil spill’s area is hard to measure, but its radius is easy. If the two are tied by an equation, a derivative turns the radius’s rate into the area’s rate.',
+    mechanical:'A weld pool’s area matters for heat input, but what you can watch is how fast its radius spreads. The two are tied by an equation, and taking the derivative of that equation links their rates.',
+    civil:'The wet area around a leak matters for repairs, but what you can measure is how fast its edge is spreading. The two are tied by an equation, and the derivative of that equation links their rates.'
+  },
+  visual:'rel',
+  caption:'Slide the radius. The radius grows at a steady 0.5 per time unit, but the yellow ring, the new area added, gets bigger as the circle does.',
+  use:[
+    'Two or more quantities are changing with time.',
+    'An equation ties them together, like A = πr² or V = (area) × (height).',
+    'You know one rate and want another: “how fast is the area growing when the radius is…”.'
+  ],
+  notuse:[
+    'Only one quantity is involved, and you want its rate at a point. That is a plain derivative.',
+    'You want the best value, not a rate. That is optimization.',
+    'You have two readings and want the average rate. No derivative needed.'
+  ],
+  test:'Do I know how fast one thing is changing, and want how fast another thing linked to it is changing? Then write the link, and differentiate with respect to time.',
+  questions:[
+    {id:'q1',topic:'Spotting a related rates problem',
+     talk:'Ask what two quantities are changing, and what equation ties them together.',
+     prompt:{
+       general:'An oil spill’s radius grows at 2 m/min. How fast is its area growing when the radius is 10 m? What kind of problem is this?',
+       mechanical:'A weld pool’s radius grows at 2 mm/s. How fast is its area growing when the radius is 10 mm? What kind of problem is this?',
+       civil:'A wet patch’s radius grows at 2 m/h. How fast is its area growing when the radius is 10 m? What kind of problem is this?'},
+     s1:{label:'Step 1: Which kind?',opts:PTYPE,correct:1},
+     s2:{label:'Step 2: Why?',opts:[
+       'The wording asks for the largest value',
+       'Two readings are given',
+       'Two changing quantities are tied by an equation, and one rate is given to find the other'],correct:2},
+     explain:function(){return 'Radius and area both change with time and are tied by A = πr². One rate is given and the other is wanted. That is the signature of a related rates problem.'}},
+    {id:'q2',topic:'Differentiating with respect to time',
+     talk:'Ask why dr/dt shows up in the answer, and what the 2πr part represents.',
+     prompt:{
+       general:'Using A = πr², we get dA/dt = 2πr · dr/dt. What is dA/dt when r = 10 m and dr/dt = 2 m/min?',
+       mechanical:'Using A = πr², we get dA/dt = 2πr · dr/dt. What is dA/dt when r = 10 mm and dr/dt = 2 mm/s?',
+       civil:'Using A = πr², we get dA/dt = 2πr · dr/dt. What is dA/dt when r = 10 m and dr/dt = 2 m/h?'},
+     s1:{label:'Step 1: What is dA/dt?',opts:function(c){var u=' '+c.rel.ru+'²/'+c.rel.tu;return ['62.8'+u,'125.7'+u,'314.2'+u]},correct:1},
+     s2:{label:'Step 2: Why?',opts:[
+       'Plug r = 10 into A = πr²',
+       'Multiply dr/dt by π',
+       'Use dA/dt = 2πr · dr/dt = 2π(10)(2)'],correct:2},
+     explain:function(){return 'dA/dt = 2π(10)(2) ≈ 125.7. Plugging r into the area formula gives the area itself, 314.2, not how fast it grows. Dropping dr/dt gives 62.8, which ignores how fast the radius is moving.'}},
+    {id:'q3',topic:'Why the same radius rate gives a different area rate',
+     talk:'Ask why the area grows faster when the radius is bigger, even though the radius grows at the same pace.',
+     prompt:{
+       general:'The spill’s radius grows at a steady rate. When the radius is large, how fast is the area growing compared with when the radius is small?',
+       mechanical:'The weld pool’s radius grows at a steady rate. When the radius is large, how fast is the area growing compared with when the radius is small?',
+       civil:'The wet patch’s radius grows at a steady rate. When the radius is large, how fast is the area growing compared with when the radius is small?'},
+     s1:{label:'Step 1: Faster, slower, or the same?',opts:['Slower','The same','Faster'],correct:2},
+     s2:{label:'Step 2: Why?',opts:[
+       'A longer edge adds more new area each moment, and dA/dt = 2πr · dr/dt grows with r',
+       'The radius rate is steady, so everything is steady',
+       'A bigger circle spreads its growth out'],correct:0},
+     explain:function(){return 'Each moment the circle adds a thin ring around its edge. A bigger circle has a longer edge, so the same steady radius rate adds more area. That is why dA/dt = 2πr · dr/dt grows with r.'}},
+    {id:'q4',topic:'One quantity is a plain derivative',
+     talk:'Ask how they can tell there is only one changing quantity, so nothing needs linking.',
+     prompt:{
+       general:'A tank’s water level is h(t) = 0.2t² (meters, minutes). How fast is the level rising at exactly t = 4 min? What kind of problem is this?',
+       mechanical:'A part’s temperature is T(t) = 0.2t² (°C, seconds). How fast is it heating up at exactly t = 4 s? What kind of problem is this?',
+       civil:'A footing’s settlement is s(t) = 0.2t² (mm, months). How fast is it settling at exactly t = 4 months? What kind of problem is this?'},
+     s1:{label:'Step 1: Which kind?',opts:PTYPE,correct:3},
+     s2:{label:'Step 2: Why?',opts:[
+       'Two rates are linked by an equation',
+       'The wording asks for the best value',
+       'Only one changing quantity is involved, so there is nothing to link'],correct:2},
+     explain:function(){return 'Only one quantity is changing, and the question is about one exact moment. That is a plain derivative: the derivative of 0.2t² is 0.4t, which is 1.6 per unit of time at t = 4. No second quantity needs linking.'}}
+  ]
+},
+{
+  id:'motion',unit:4,title:'Motion: position, velocity, acceleration',
+  summary:'Each one is the derivative of the one before it.',
+  why:{
+    general:'Anything that moves can be described three ways: where it is, how fast it is going, and how fast its speed is changing. Each one is the derivative of the one before it. Once you see that, one position formula tells you everything.',
+    mechanical:'A piston’s position formula hides its speed and its acceleration, and acceleration is what sets the force on the rod. Each is the derivative of the one before, so one position formula gives you all three.',
+    civil:'A braking train’s position formula hides its speed and its braking rate, and the braking rate sets the force on the track and on the passengers. Each is the derivative of the one before, so one position formula gives you all three.'
+  },
+  visual:'mot',
+  caption:'Slide time. The dashed line is the slope of the position curve, which is the velocity. Watch the velocity fall to zero and then go negative.',
+  use:[
+    'The problem gives position and asks for velocity or acceleration.',
+    'It says “speed”, “how fast is it moving”, “braking”, or “speeding up”.',
+    'You have a position formula and want to know what is happening at one moment.'
+  ],
+  notuse:[
+    'It gives two positions and two times and asks for the average velocity. No derivative needed.',
+    'It asks for a best value, like the stopping point that minimizes something. That is optimization.',
+    'It links two changing rates through an equation. That is related rates.'
+  ],
+  test:'Position to velocity is one derivative. Velocity to acceleration is one more. Count the steps.',
+  questions:[
+    {id:'v1',topic:'Spotting a motion problem',
+     talk:'Ask how they can tell a problem is about position, velocity, or acceleration.',
+     prompt:{
+       general:'An elevator car’s position is given by a formula s(t). What is its velocity at exactly t = 3 s? What kind of problem is this?',
+       mechanical:'A piston’s position is given by a formula s(t). What is its velocity at exactly t = 3 s? What kind of problem is this?',
+       civil:'A train’s position is given by a formula s(t). What is its velocity at exactly t = 3 s? What kind of problem is this?'},
+     s1:{label:'Step 1: Which kind?',opts:PTYPE,correct:2},
+     s2:{label:'Step 2: Why?',opts:[
+       'Position is given and velocity is wanted, so take one derivative',
+       'Two rates are linked by an equation',
+       'The wording asks for the best value'],correct:0},
+     explain:function(){return 'Going from position to velocity is one derivative, so this is a motion problem. Velocity is the slope of the position curve at that moment.'}},
+    {id:'v2',topic:'Position to velocity',
+     talk:'Ask why plugging t = 3 into the position formula gives the wrong thing.',
+     prompt:{
+       general:'An elevator car’s position is s(t) = 4t² − t (meters, seconds). What is its velocity at t = 3 s?',
+       mechanical:'A piston’s position is s(t) = 4t² − t (cm, seconds). What is its velocity at t = 3 s?',
+       civil:'A train’s position is s(t) = 4t² − t (meters, seconds). What is its velocity at t = 3 s?'},
+     s1:{label:'Step 1: What is the velocity?',opts:function(c){return ['33 '+c.mot.vu,'23 '+c.mot.vu,'8 '+c.mot.vu]},correct:1},
+     s2:{label:'Step 2: How do you get it?',opts:[
+       'Differentiate s to get v(t) = 8t − 1, then plug in t = 3',
+       'Plug t = 3 into s(t)',
+       'Take the second derivative'],correct:0},
+     explain:function(c){return 'v(t) = s′(t) = 8t − 1, so v(3) = 23 '+c.mot.vu+'. Plugging 3 into s gives the position, 33 '+c.mot.pu+'. The 8 is the acceleration.'}},
+    {id:'v3',topic:'Velocity to acceleration',
+     talk:'Ask how acceleration relates to velocity, the way velocity relates to position.',
+     prompt:{
+       general:'Same elevator car, s(t) = 4t² − t. What is its acceleration?',
+       mechanical:'Same piston, s(t) = 4t² − t. What is its acceleration?',
+       civil:'Same train, s(t) = 4t² − t. What is its acceleration?'},
+     s1:{label:'Step 1: What is the acceleration?',opts:function(c){return ['23 '+c.mot.au,'8 '+c.mot.au,'0 '+c.mot.au]},correct:1},
+     s2:{label:'Step 2: Why?',opts:[
+       'Acceleration is the velocity at t = 3',
+       'Acceleration is position divided by time',
+       'Acceleration is the derivative of velocity, so differentiate v(t) = 8t − 1 once more'],correct:2},
+     explain:function(){return 'a(t) = v′(t) = 8, a constant. Acceleration is the derivative of velocity, which makes it the second derivative of position.'}},
+    {id:'v4',topic:'Reading a negative velocity',
+     talk:'Ask what a negative velocity means for the position, and what happens at the instant velocity is zero.',
+     prompt:{
+       general:'An elevator’s velocity is positive until t = 5 s, zero at 5 s, and negative afterward. What is it doing after 5 s?',
+       mechanical:'A piston’s velocity is positive until t = 5 s, zero at 5 s, and negative afterward. What is it doing after 5 s?',
+       civil:'A train’s velocity is positive until t = 5 s, zero at 5 s, and negative afterward. What is it doing after 5 s?'},
+     s1:{label:'Step 1: What is it doing?',opts:['Speeding up forward','Stopped for good','Moving backward'],correct:2},
+     s2:{label:'Step 2: Why?',opts:[
+       'Negative velocity can’t happen',
+       'Velocity is the rate of change of position, so a negative velocity means the position is decreasing',
+       'Zero velocity means the position is zero'],correct:1},
+     explain:function(){return 'Velocity is the slope of the position curve. A negative slope means the position is decreasing, so it is moving backward. At t = 5 the slope is zero for an instant: it has stopped to turn around.'}}
+  ]
+},
+{
+  id:'curve',unit:4,title:'Curve behavior: what the derivatives say',
+  summary:'The first derivative says rising or falling. The second says bending up or down.',
+  why:{
+    general:'A graph tells its story in two layers. The first derivative says whether the curve is rising or falling. The second derivative says how that slope is changing, which means whether the curve is bending up or bending down. Together they let you read peaks, valleys, and bends without plotting a single point.',
+    mechanical:'A beam’s deflection curve decides where it is most stressed. The first derivative gives the slope of the beam, and the second gives how sharply it bends, which is tied directly to stress. Reading both tells you where the beam peaks, where it bends the most, and where its bend flips.',
+    civil:'A road’s elevation curve decides drainage, comfort, and safety. The first derivative gives the grade, climbing or descending. The second gives how the grade is changing, which is what makes a crest or a dip. Reading both tells you where the road peaks, dips, and changes its bend.'
+  },
+  visual:'crv',
+  caption:'Slide along the curve. The dashed line is the slope, the first derivative. Find where it flattens, and watch the bend change from one side of the middle to the other.',
+  use:[
+    'The problem asks where something is rising, falling, at a peak, or at a valley.',
+    'It asks whether a flat point is a maximum or a minimum.',
+    'It says “concave”, “bending up or down”, or “inflection”.'
+  ],
+  notuse:[
+    'It asks for the biggest or smallest value from a formula. Set that up as optimization, which uses this reading.',
+    'It links one rate to another. That is related rates.',
+    'It gives two readings only. That is an average rate, with no derivative needed.'
+  ],
+  test:'First derivative: rising or falling. Second derivative: bending up or bending down.',
+  questions:[
+    {id:'cu1',topic:'First derivative means rising or falling',
+     talk:'Ask what the sign of the first derivative tells you about the curve.',
+     prompt:T3('A temperature curve T(h) is given by a formula. Which tells you whether the temperature is rising or falling at a particular hour?','A beam’s deflection curve w(x) is given by a formula. Which tells you whether the deflection is increasing or decreasing at a particular spot?','A road’s elevation curve e(d) is given by a formula. Which tells you whether the road is climbing or descending at a particular spot?'),
+     s1:{label:'Step 1: Which one?',opts:['The first derivative','The second derivative','The original function itself'],correct:0},
+     s2:{label:'Step 2: Why?',opts:['The second derivative is the slope','The first derivative is the slope: positive means rising, negative means falling','The height of the function tells the direction'],correct:1},
+     explain:function(){return 'The first derivative is the slope of the curve. Positive means rising, negative means falling, and zero means momentarily flat.'}},
+    {id:'cu2',topic:'Flat points are the candidates for peaks and valleys',
+     talk:'Ask why a peak has to be a place where the slope is zero.',
+     prompt:T3('At which hours could the temperature curve have a daily high or low?','At which spots could the beam’s deflection curve have a maximum or minimum?','At which spots could the road’s elevation have a crest or a dip?'),
+     s1:{label:'Step 1: Where?',opts:['Where the first derivative is zero','Where the second derivative is zero','Where the function itself equals zero'],correct:0},
+     s2:{label:'Step 2: Why?',opts:['A crest is where the bend flips','At a crest or dip the slope levels off for an instant','The curve always crosses zero at a peak'],correct:1},
+     explain:function(){return 'A smooth curve can only turn around where its slope passes through zero. Those flat points are the candidates for peaks and valleys. The second derivative then tells you which is which.'}},
+    {id:'cu3',topic:'Second derivative tells peak from valley',
+     talk:'Ask how the sign of the second derivative tells a hilltop from a valley bottom.',
+     prompt:T3('The temperature curve is flat at 3 pm, and T″ = −2 there. What is happening at 3 pm?','The beam’s deflection curve is flat at midspan, and w″ = −2 there. What is happening at midspan?','The road’s elevation is flat at the 4 km mark, and e″ = −2 there. What is happening at 4 km?'),
+     s1:{label:'Step 1: What is it?',opts:['A peak (a maximum)','A valley (a minimum)','An inflection point'],correct:0},
+     s2:{label:'Step 2: Why?',opts:['A flat point is always a valley','A negative number always means the lowest point','A negative second derivative means the curve bends down, like a frown, so the flat point is the top'],correct:2},
+     explain:function(){return 'f′ = 0 says the curve is flat. f″ < 0 says it bends downward there, like the top of a hill, so it is a peak. If f″ were positive it would be a valley.'}},
+    {id:'cu4',topic:'A sign change in the second derivative flips the bend',
+     talk:'Ask what an inflection point is, and whether the slope has to be zero there.',
+     prompt:ALL('The second derivative changes from negative to positive at x = 5. What does that tell you about the curve at x = 5?'),
+     s1:{label:'Step 1: What does it tell you?',opts:['There is a peak','The slope is zero','The bend flips from downward to upward (an inflection point)'],correct:2},
+     s2:{label:'Step 2: Why?',opts:['A sign change always means a peak','The second derivative is the rate the slope is changing, so a sign change means the bend flips','The second derivative equals the slope'],correct:1},
+     explain:function(){return 'f″ tells which way the curve bends. When it changes sign, the bend flips, and that point is an inflection point. The slope there isn’t necessarily zero.'}}
+  ]
+},
+{
+  id:'linear',unit:4,title:'Linear approximation: the tangent as a stand-in',
+  summary:'Near a point you know, a curve looks like its tangent line, so you can estimate small changes quickly.',
+  why:{
+    general:'Plenty of formulas are painful to evaluate, and in the field you often just need a quick estimate for a small nudge. Zoom in far enough on any smooth curve and it looks like a straight line. That line, the tangent, is a cheap stand-in for the curve near a point you already know.',
+    mechanical:'You know a part’s energy at one speed and how fast it changes there. A small nudge in speed doesn’t need the whole formula again. The tangent line gives a quick, reliable estimate near the point you already know.',
+    civil:'You know the wind load at a design speed and how fast it changes there. When the speed shifts a little, you don’t need to redo the whole calculation. The tangent line gives a quick estimate near the point you know.'
+  },
+  visual:'lin',
+  caption:'Move the point of tangency, then change the step. The vertical gap between the curve and the tangent line is the error. It stays tiny for small steps and grows quickly for big ones.',
+  use:[
+    'You know a value and the slope at one point, and the question asks about a small step away.',
+    'The problem says “estimate”, “approximately”, or “small change”.',
+    'The exact formula is awkward or unknown, but the slope is known.'
+  ],
+  notuse:[
+    'The step is large. The tangent line drifts away from the curve.',
+    'You need an exact value and the formula is easy to evaluate.',
+    'You want the best value or a total. Use optimization or an integral.'
+  ],
+  test:'Start at the known value and add slope times the small step: f(a) + f′(a) × step.',
+  questions:[
+    {id:'li1',topic:'Spotting when to use the tangent line',
+     talk:'Ask what clues say a problem wants a quick estimate from a known point and slope.',
+     prompt:T3('The drag on a drone at 4 m/s is 1.6 N, and it is rising by 0.8 N per m/s there. You want a quick estimate of the drag at 4.5 m/s without redoing the whole formula. Which tool?','A part’s kinetic energy at 4 m/s is 1.6 J, and it is rising by 0.8 J per m/s there. You want a quick estimate at 4.5 m/s without redoing the formula. Which tool?','The wind load at 4 m/s is 1.6 kN, and it is rising by 0.8 kN per m/s there. You want a quick estimate at 4.5 m/s without redoing the calculation. Which tool?'),
+     s1:{label:'Step 1: Which tool?',opts:LTYPE,correct:0},
+     s2:{label:'Step 2: Why?',opts:['It asks for the best value','Two readings were given','It is a small step from a known point with a known slope, so the tangent line can stand in for the curve'],correct:2},
+     explain:function(){return 'You know a value and the slope at one point, and the question is about a small step away. That is exactly what linear approximation is for.'}},
+    {id:'li2',topic:'Using value plus slope times step',
+     talk:'Ask them to explain each part of: known value plus slope times step.',
+     prompt:T3('Same drone: drag is 1.6 N at 4 m/s, rising 0.8 N per m/s. What is the estimated drag at 4.5 m/s?','Same part: energy is 1.6 J at 4 m/s, rising 0.8 J per m/s. What is the estimated energy at 4.5 m/s?','Same structure: wind load is 1.6 kN at 4 m/s, rising 0.8 kN per m/s. What is the estimated load at 4.5 m/s?'),
+     s1:{label:'Step 1: What is the estimate?',opts:function(c){return ['2.0 '+c.lin.yu,'2.4 '+c.lin.yu,'1.6 '+c.lin.yu]},correct:0},
+     s2:{label:'Step 2: How do you get it?',opts:['Add the step to the known value','Start at the known value and add slope times the step: 1.6 + 0.8 × 0.5','Multiply the known value by the step'],correct:1},
+     explain:function(){return 'Estimate = f(a) + f′(a) × step = 1.6 + 0.8 × 0.5 = 2.0. Forgetting to multiply the slope by the step (1.6 + 0.8) gives 2.4.'}},
+    {id:'li3',topic:'Error grows with the step',
+     talk:'Ask why a bigger step makes the tangent line a worse stand-in.',
+     prompt:ALL('A step of 0.5 gave an error of 0.025. What happens to the error if the step grows to 2?'),
+     s1:{label:'Step 1: What happens?',opts:['It shrinks','It grows quickly, since the curve bends away from its tangent','It stays the same'],correct:1},
+     s2:{label:'Step 2: Why?',opts:['The tangent line gets more accurate with distance','Error doesn’t depend on the step','The farther from the known point, the more the curve bends away from the line'],correct:2},
+     explain:function(){return 'The farther you step from the known point, the more the curve bends away from the tangent. Here a step of 2 gives 3.2 against a true 3.6, an error of 0.4, which is sixteen times bigger for a step four times bigger.'}},
+    {id:'li4',topic:'Too high or too low',
+     talk:'Ask which side of its tangent line a curve sits on when it bends upward.',
+     prompt:ALL('The curve bends upward (its second derivative is positive). Is the tangent-line estimate too low or too high?'),
+     s1:{label:'Step 1: Which one?',opts:['Too high','Exact','Too low'],correct:2},
+     s2:{label:'Step 2: Why?',opts:['A curve that bends up sits above its tangent line, so the line underestimates','A curve that bends up sits below its tangent line','Tangent estimates are never off'],correct:0},
+     explain:function(){return 'A curve bending upward lies above its tangent line, so the line gives an estimate that is slightly low. Check: the estimate 2.0 sits just under the true value 2.025.'}}
+  ]
+},
+{
+  id:'riemann',unit:5,title:'Adding up slices: the integral idea',
+  summary:'How to add up a rate that keeps changing to get a total.',
+  why:{
+    general:'A derivative takes a total and tells you the rate. An integral goes the other way: it takes a rate that keeps changing and adds it all up. You can’t just multiply speed by time when the speed varies. But you can cut the trip into thin slices where the speed is nearly steady, then add the slices.',
+    mechanical:'A motor’s power output isn’t constant, so the energy it used isn’t just power times time. Cut the time into thin slices where the power is nearly steady, multiply each slice, and add them up. As the slices get thinner the sum becomes exact, and that limit is the integral.',
+    civil:'River flow into a reservoir keeps changing, so the volume that arrived isn’t just flow times time. Cut the time into thin slices where the flow is nearly steady, add them up, and let the slices shrink. That limit is the integral.'
+  },
+  visual:'riem',
+  caption:'Slide the number of slices. Each yellow bar uses the rate at its left edge. Watch the sum close in on the exact total as the bars get thinner.',
+  use:[
+    'The problem gives a rate that changes and asks for a total.',
+    'It says “total”, “accumulated”, “how much in all”, or “area under the curve”.',
+    'Multiplying rate by time doesn’t work because the rate isn’t constant.'
+  ],
+  notuse:[
+    'The rate is constant. Just multiply.',
+    'You are given the total and want the rate. That is a derivative.',
+    'You want the best value. That is optimization.'
+  ],
+  test:'Is something changing, and am I adding it up? Then slice, multiply each slice by its width, and add. That is an integral.',
+  questions:[
+    {id:'ri1',topic:'Spotting when to add up a changing rate',
+     talk:'Ask why a changing rate can’t just be multiplied by time.',
+     prompt:T3('A drone’s speed changes throughout its flight. You know the speed at every moment and want the total distance it flew. Which tool fits?','A motor’s power output changes through a shift. You know the power at every moment and want the total energy it used. Which tool fits?','Inflow to a reservoir changes through a storm. You know the inflow at every moment and want the total volume that arrived. Which tool fits?'),
+     s1:{label:'Step 1: Which tool?',opts:ITYPE,correct:1},
+     s2:{label:'Step 2: Why?',opts:['The rate keeps changing, so the total has to be added up in slices','The question asks how fast something is changing','Two readings are given and a rate is wanted'],correct:0},
+     explain:function(){return 'A changing rate can’t just be multiplied by time. Cut the time into thin slices, multiply each slice’s rate by its width, and add them up. That sum, in the limit, is the integral.'}},
+    {id:'ri2',topic:'Slice width matters',
+     talk:'Ask why each slice’s rate has to be multiplied by the slice’s width.',
+     prompt:T3('A drone’s speed is 2, 4, 6, and 8 m/min at the start of four half-minute slices. What is the left sum for the distance?','A motor’s power is 2, 4, 6, and 8 kW at the start of four half-hour slices. What is the left sum for the energy?','A reservoir’s inflow is 2, 4, 6, and 8 m³/h at the start of four half-hour slices. What is the left sum for the volume?'),
+     s1:{label:'Step 1: What is the sum?',opts:function(c){return ['20 '+c.acc.au,'10 '+c.acc.au,'16 '+c.acc.au]},correct:1},
+     s2:{label:'Step 2: How do you get it?',opts:['Add the rates and stop','Multiply each slice’s rate by its width (0.5), then add them all','Multiply the biggest rate by the total time'],correct:1},
+     explain:function(){return '(2 + 4 + 6 + 8) × 0.5 = 10. Adding the rates alone forgets the slice width and gives 20, and using only the biggest rate overshoots at 8 × 2 = 16.'}},
+    {id:'ri3',topic:'Thinner slices, better answer',
+     talk:'Ask what happens to the leftover gaps as the slices get thinner.',
+     prompt:ALL('A rate rises steadily, and you estimate the total with left-side slices. What happens to the estimate as you use thinner and thinner slices?'),
+     s1:{label:'Step 1: What happens?',opts:['It gets closer to the exact total','It drifts further away','It stays exactly the same'],correct:0},
+     s2:{label:'Step 2: Why?',opts:['Thinner slices add more error each time','Thinner slices hug the curve more closely, so the sum approaches the integral','The number of slices doesn’t matter'],correct:1},
+     explain:function(){return 'Thin slices fit the curve better, so the leftover gaps shrink. As the slices shrink toward zero the sum settles onto one value, the exact total. That value is the integral.'}},
+    {id:'ri4',topic:'A steady rate needs no integral',
+     talk:'Ask how they can tell when a rate is steady enough to just multiply.',
+     prompt:T3('A drone flies at a steady 12 m/min for 5 min. How far does it go?','A motor draws a steady 6 kW for 5 h. How much energy does it use?','A pump moves a steady 8 m³/h for 5 h. How much volume does it move?'),
+     s1:{label:'Step 1: Which tool?',opts:ITYPE,correct:2},
+     s2:{label:'Step 2: Why?',opts:['The rate never changes, so one multiplication gives the total','Anything with a total needs an integral','A steady rate means a derivative'],correct:0},
+     explain:function(){return 'A steady rate times the time gives the total with no slicing. Save integrals for rates that change.'}}
+  ]
+},
+{
+  id:'ftc',unit:5,title:'Integrals and derivatives undo each other',
+  summary:'The running total of a rate grows at exactly that rate.',
+  why:{
+    general:'Here is the surprise at the heart of calculus. Add up a rate to get a running total, and the rate of change of that total is the rate you started with. Derivative and integral are opposites, like multiplying and dividing. That is why you can find exact totals without slicing at all.',
+    mechanical:'Energy used so far is the running total of power. Ask how fast that running total is growing, and you get the power back. Derivative and integral undo each other, which is what lets you find exact totals without cutting anything into slices.',
+    civil:'Water stored so far is the running total of inflow. Ask how fast that total is growing, and you get the inflow back. Derivative and integral undo each other, so you can find exact totals without slicing.'
+  },
+  visual:'ftc',
+  caption:'Slide along the rate curve. The top graph shades the total so far. The bottom graph plots that running total, and its dashed slope line matches the rate above.',
+  use:[
+    'One quantity is the running total of another.',
+    'You have a formula for the rate and want an exact total.',
+    'You have a formula for the total and want the rate.'
+  ],
+  notuse:[
+    'You only have a few readings, not a formula. Add up slices instead.',
+    'The question asks for the best value. That is optimization.',
+    'Nothing is changing. Just multiply.'
+  ],
+  test:'Which way am I going? From a total to its rate is a derivative. From a rate to its total is an integral.',
+  questions:[
+    {id:'f1',topic:'Total to rate is a derivative',
+     talk:'Ask which direction goes from a total to its rate, and which goes the other way.',
+     prompt:T3('A drone’s distance flown so far, D(t), is known as a formula. You want its speed at one moment. Which tool?','A motor’s energy used so far, E(t), is known as a formula. You want its power at one moment. Which tool?','A reservoir’s stored volume, V(t), is known as a formula. You want the inflow at one moment. Which tool?'),
+     s1:{label:'Step 1: Which tool?',opts:ITYPE,correct:0},
+     s2:{label:'Step 2: Why?',opts:['Going from a total to its rate is an integral','Going from a total to its rate is a derivative','The rate is constant, so just multiply'],correct:1},
+     explain:function(){return 'The running total is given and the rate is wanted. A derivative takes a total and returns how fast it is growing.'}},
+    {id:'f2',topic:'Rate to total is an integral',
+     talk:'Ask how they can tell a problem needs a total built from a rate.',
+     prompt:T3('A drone’s speed v(t) is known as a formula. You want the total distance flown over the trip. Which tool?','A motor’s power P(t) is known as a formula. You want the total energy used over a shift. Which tool?','A reservoir’s inflow q(t) is known as a formula. You want the total volume that arrived over a storm. Which tool?'),
+     s1:{label:'Step 1: Which tool?',opts:ITYPE,correct:1},
+     s2:{label:'Step 2: Why?',opts:['Going from a rate to its total is a derivative','Two readings were given','Going from a rate to its total is an integral'],correct:2},
+     explain:function(){return 'The rate is given and the running total is wanted. An integral takes a rate and returns the total it adds up to.'}},
+    {id:'f3',topic:'Slope of a running total',
+     talk:'Ask why the running total grows exactly as fast as the rate being added.',
+     prompt:ALL('A running total A(x) adds up a rate f over time. What is the slope of A at any moment?'),
+     s1:{label:'Step 1: What is the slope?',opts:['Zero','f(x), the rate being added at that moment','A(x) itself'],correct:1},
+     s2:{label:'Step 2: Why?',opts:['A running total always has a flat slope','The slope is the area so far','The total grows exactly as fast as the rate being added'],correct:2},
+     explain:function(){return 'The total grows at exactly the rate being added at that moment. That is the first half of the Fundamental Theorem: the derivative of the running total is the rate.'}},
+    {id:'f4',topic:'Using the undoing to find a total',
+     talk:'Ask how finding a function whose derivative is the rate gives the total without slicing.',
+     prompt:ALL('A function F has derivative F′(x) = 2x. What is the total, the integral of 2x from 0 to 3?'),
+     s1:{label:'Step 1: What is the total?',opts:['3','9','6'],correct:1},
+     s2:{label:'Step 2: How do you get it?',opts:['Plug 3 into 2x','Multiply 2x by 3','Find a function whose derivative is 2x, which is x², then subtract its values at the ends: 9 − 0'],correct:2},
+     explain:function(){return 'F(x) = x² has derivative 2x, so the total is F(3) − F(0) = 9 − 0 = 9. Plugging 3 into the rate gives 6, which is the rate at the end, not the total.'}}
+  ]
+},
+{
+  id:'antider',unit:5,title:'Finding exact totals: antiderivatives',
+  summary:'Run the derivative rules backward, then subtract the values at the two ends.',
+  why:{
+    general:'Slicing and adding is the idea, but nobody does it by hand. The shortcut: find a function whose derivative is your rate, then subtract its values at the two ends. That function is an antiderivative, and the rules you already know run in reverse.',
+    mechanical:'To get the exact energy a motor used, you don’t slice the shift into thousands of pieces. You find a function whose derivative is the power, then subtract its values at the start and the end. The derivative rules run in reverse to find it.',
+    civil:'To get the exact volume that arrived in a storm, you don’t slice it into thousands of pieces. You find a function whose derivative is the inflow, then subtract its values at the start and the end. The derivative rules run in reverse to find it.'
+  },
+  visual:'anti',
+  caption:'Pick a rate. See which rule runs backward, how to check the answer by differentiating, and how to evaluate the total.',
+  use:[
+    'The problem wants an exact total and gives a formula for the rate.',
+    'The rate is a power of x or a sum of them: run the power rule backward.',
+    'A function and the derivative of its inside sit side by side, like 2x(x² + 1)³: run the chain rule backward.'
+  ],
+  notuse:[
+    'You only have readings, not a formula. Add up slices instead.',
+    'You want a rate from a total. That is a derivative.',
+    'Nothing is changing. Just multiply.'
+  ],
+  test:'Can I think of a function whose derivative is my rate? Then evaluate it at the two ends and subtract.',
+  questions:[
+    {id:'a1',topic:'Undoing a derivative',
+     talk:'Ask them to check an antiderivative by differentiating it.',
+     prompt:ALL('Which function has derivative 3x²?'),
+     s1:{label:'Step 1: Which function?',opts:['x³','3x³','x²'],correct:0},
+     s2:{label:'Step 2: Why?',opts:['The power should stay the same, and only the 3 changes','Anything with a 3 in it works','Differentiating x³ gives 3x², so x³ undoes it'],correct:2},
+     explain:function(){return 'Run the power rule backward: add 1 to the power and divide by the new power. x² becomes x³ ÷ 3, so 3x² becomes x³. Check by differentiating x³ and you get 3x².'}},
+    {id:'a2',topic:'Evaluating at the two ends',
+     talk:'Ask why we subtract the value at the start from the value at the end.',
+     prompt:ALL('A rate is x². What is the total, the integral of x² from 0 to 3?'),
+     s1:{label:'Step 1: What is the total?',opts:['27','9','3'],correct:1},
+     s2:{label:'Step 2: How do you get it?',opts:['The antiderivative is x³ ÷ 3, so the total is 27 ÷ 3 − 0','Plug 3 into x²','The antiderivative is x³, so the total is 27'],correct:0},
+     explain:function(){return 'The antiderivative of x² is x³ ÷ 3. Evaluate at 3 and at 0 and subtract: 27 ÷ 3 − 0 = 9. Forgetting to divide by 3 gives 27.'}},
+    {id:'a3',topic:'A total from a rate formula',
+     talk:'Ask the difference between the rate at the end and the total over the whole time.',
+     prompt:T3('A drone’s speed is 4t + 1 m/min. How far does it fly in the first 3 minutes?','A motor’s power is 4t + 1 kW. How much energy does it use in the first 3 hours?','A reservoir’s inflow is 4t + 1 m³/h. How much volume arrives in the first 3 hours?'),
+     s1:{label:'Step 1: What is the total?',opts:function(c){return ['13 '+c.acc.au,'21 '+c.acc.au,'39 '+c.acc.au]},correct:1},
+     s2:{label:'Step 2: How do you get it?',opts:['Plug t = 3 into the rate','Multiply the rate at t = 3 by 3','The antiderivative is 2t² + t, so evaluate at 3 and 0 and subtract'],correct:2},
+     explain:function(){return 'The antiderivative of 4t + 1 is 2t² + t. At 3 it is 18 + 3 = 21, and at 0 it is 0, so the total is 21. Plugging in 3 gives the rate at the end (13), and multiplying that by 3 gives 39, which assumes the rate was always that high.'}},
+    {id:'a4',topic:'The chain rule run backward',
+     talk:'Ask what clue shows that the chain rule is hiding inside an integral.',
+     prompt:ALL('Which function is an antiderivative of 2x(x² + 1)³?'),
+     s1:{label:'Step 1: Which function?',opts:['(x² + 1)⁴ ÷ 4','(x² + 1)⁴','2x(x² + 1)⁴ ÷ 4'],correct:0},
+     s2:{label:'Step 2: Why?',opts:['Just raise everything to the 4th power','Run the chain rule backward: the derivative of (x² + 1)⁴ ÷ 4 is (x² + 1)³ · 2x','Divide only the 2x by 4'],correct:1},
+     explain:function(){return 'The inside, x² + 1, has derivative 2x, and 2x is sitting right there. That signals the chain rule run backward. Differentiating (x² + 1)⁴ ÷ 4 gives (x² + 1)³ · 2x, exactly the rate.'}}
+  ]
+},
+{
+  id:'between',unit:6,title:'Area between curves',
+  summary:'Slice a region into strips as tall as top minus bottom.',
+  why:{
+    general:'Real shapes are rarely bounded by one curve and the axis. A land parcel, a cut-out plate, a channel: each sits between two boundaries. Slice it into thin strips, each as tall as the gap between the boundaries, and add the strips up.',
+    mechanical:'A plate cut between two profile curves has an area you need for weight and material cost. Slice it into thin strips, each as tall as the gap between the curves, and add them up.',
+    civil:'A channel’s cross-section sits between the bank on one side and the bed on the other, and its area sets how much water it can carry. Slice it into thin strips, each as tall as the gap, and add them up.'
+  },
+  visual:'btw',
+  caption:'Slide the number of strips. Each strip is as tall as top minus bottom, so the strips add up to the area between the curves.',
+  use:[
+    'The problem says “region between”, “enclosed by”, or “between the curves”.',
+    'Two boundary curves are given.',
+    'You can slice the region into thin strips of height top − bottom.'
+  ],
+  notuse:[
+    'Only one curve and the axis are involved. That is plain area under a curve.',
+    'A volume is wanted, not an area. That is slicing into solids.',
+    'The problem gives a rate and wants a total. No region is involved.'
+  ],
+  test:'Slice into thin strips. Each strip’s height is top minus bottom. Add them up.',
+  questions:[
+    {id:'b1',topic:'Spotting an area-between problem',
+     talk:'Ask what words in a problem point to a region bounded by two curves.',
+     prompt:T3('A land parcel lies between two boundary curves. You need its area. What kind of problem is this?','A plate is cut between two profile curves. You need its area. What kind of problem is this?','A channel’s banks follow two curves. You need the cross-section area between them. What kind of problem is this?'),
+     s1:{label:'Step 1: Which kind?',opts:U6,correct:0},
+     s2:{label:'Step 2: Why?',opts:['A rate is given and a total is wanted','A force changes with distance','The region is bounded by two curves, so slice it into strips of top minus bottom'],correct:2},
+     explain:function(){return 'A region between two boundary curves is an area-between problem. Slice it into thin vertical strips, each as tall as top minus bottom, and add them up.'}},
+    {id:'b2',topic:'Setting up top minus bottom',
+     talk:'Ask them to explain which curve is on top and why that decides the subtraction.',
+     prompt:ALL('The top boundary is y = x and the bottom is y = 0.1x², from x = 0 to x = 10. Which integral gives the area?'),
+     s1:{label:'Step 1: Which integral?',opts:['∫ (x − 0.1x²) dx','∫ (x + 0.1x²) dx','∫ (0.1x² − x) dx'],correct:0},
+     s2:{label:'Step 2: Why?',opts:['Add the two curves to combine them','Each strip’s height is the top curve minus the bottom curve','The order of subtraction never matters'],correct:1},
+     explain:function(){return 'A strip stretches from the bottom curve up to the top curve, so its height is top minus bottom: x − 0.1x². Adding the curves would measure something else entirely.'}},
+    {id:'b3',topic:'Evaluating the area',
+     talk:'Ask why integrating only the top curve gives too much area.',
+     prompt:ALL('Evaluate the area: the integral of (x − 0.1x²) from 0 to 10.'),
+     s1:{label:'Step 1: What is the area?',opts:function(c){return ['16.7 '+c.btw.au,'83.3 '+c.btw.au,'50 '+c.btw.au]},correct:0},
+     s2:{label:'Step 2: How do you get it?',opts:['Add the area under each curve','Only integrate the top curve','The antiderivative is x² ÷ 2 − x³ ÷ 30, which is 50 − 33.3 at 10 and 0 at 0'],correct:2},
+     explain:function(){return 'The antiderivative of x − 0.1x² is x² ÷ 2 − x³ ÷ 30. At 10 that is 50 − 33.3 = 16.7, and at 0 it is 0. Adding the two areas (83.3) or using only the top curve (50) answers a different question.'}},
+    {id:'b4',topic:'Why top minus bottom',
+     talk:'Ask what a negative area would tell you about the setup.',
+     prompt:ALL('Why do we subtract top minus bottom instead of bottom minus top?'),
+     s1:{label:'Step 1: Which is right?',opts:['Bottom minus top is just as good','Top minus bottom keeps each strip’s height positive','You should add them instead'],correct:1},
+     s2:{label:'Step 2: Why?',opts:['The order of subtraction never matters in calculus','The top curve is always the bigger number','A strip’s height is a distance, so it must be positive. The other order gives a negative area'],correct:2},
+     explain:function(){return 'Each strip’s height is the distance between the curves, which has to be positive. Swapping the order flips the sign and gives a negative area. If you ever get one, check which curve is on top.'}}
+  ]
+},
+{
+  id:'volume',unit:6,title:'Volume of a solid by slicing',
+  summary:'Slice a solid into thin disks, find each disk’s area, and add them up.',
+  why:{
+    general:'Tanks, funnels, and shafts are shaped by spinning a curve around an axis. You can’t multiply length by one area because the area changes along the way. Slice the solid into thin disks, find each disk’s area, and add them up.',
+    mechanical:'A turned shaft changes width along its length, so its volume, and so its mass, isn’t one area times the length. Slice it into thin disks, find each disk’s area, and add them up.',
+    civil:'A funnel-shaped tank gets wider along its height, so its capacity isn’t one area times the height. Slice it into thin disks, find each disk’s area, and add them up.'
+  },
+  visual:'vol',
+  caption:'Slide along the axis. The yellow disk is one thin slice of the solid, and its area is π times the radius squared. Adding up every disk gives the volume.',
+  use:[
+    'The problem says “rotated around”, “solid of revolution”, or gives cross-sections.',
+    'Each slice has an area you can write as a formula, like π r² for a disk.',
+    'You want how much space the solid takes up.'
+  ],
+  notuse:[
+    'A flat area is wanted. That is area under or between curves.',
+    'A total from a rate is wanted. No solid is involved.',
+    'Every cross-section is the same size. Just multiply base area by length.'
+  ],
+  test:'Slice it. Find the area of one slice. Multiply by its thickness and add them up.',
+  questions:[
+    {id:'vo1',topic:'Spotting a volume problem',
+     talk:'Ask what “rotated around” tells you about the shape of each slice.',
+     prompt:T3('A tank is made by spinning the curve y = 0.1x² around the x-axis, from x = 0 to x = 10 m. You need its volume. What kind of problem is this?','A shaft is turned by spinning the curve y = 0.1x² around the x-axis, from x = 0 to x = 10 cm. You need its volume. What kind of problem is this?','A funnel-shaped tank is made by spinning the curve y = 0.1x² around the x-axis, from x = 0 to x = 10 m. You need its volume. What kind of problem is this?'),
+     s1:{label:'Step 1: Which kind?',opts:U6,correct:1},
+     s2:{label:'Step 2: Why?',opts:['Two flat curves bound a region','A force changes with distance','The solid is built from slices whose areas can be added up'],correct:2},
+     explain:function(){return 'Spinning a curve around an axis makes a solid. Its volume comes from slicing it into thin disks and adding up their volumes.'}},
+    {id:'vo2',topic:'The area of one disk',
+     talk:'Ask what the radius of each disk is, and where it comes from on the graph.',
+     prompt:ALL('Each slice of that solid is a thin disk. What is the area of one disk at position x?'),
+     s1:{label:'Step 1: What is the area?',opts:['0.1x²','π(0.1x²)²','2π(0.1x²)'],correct:1},
+     s2:{label:'Step 2: Why?',opts:['The area of a disk is just its radius','The disk’s radius is the height of the curve, and its area is π times the radius squared','The area of a disk is its circumference'],correct:1},
+     explain:function(){return 'The disk’s radius is the height of the curve, 0.1x². A disk’s area is π times the radius squared, so it is π(0.1x²)². The radius alone, or 2π times it, measures a length instead of an area.'}},
+    {id:'vo3',topic:'Setting up the volume integral',
+     talk:'Ask why the π can’t be left out of the integral.',
+     prompt:ALL('Which integral adds up the disks to give the volume?'),
+     s1:{label:'Step 1: Which integral?',opts:['∫ from 0 to 10 of π(0.1x²)² dx','∫ from 0 to 10 of π(0.1x²) dx','∫ from 0 to 10 of (0.1x²)² dx'],correct:0},
+     s2:{label:'Step 2: Why?',opts:['Add up the radii','Skip the π, since it is a constant','Add up the disk areas π r² across the length, using r = 0.1x²'],correct:2},
+     explain:function(){return 'Volume is the sum of disk areas times their thickness. Each disk has area π r² with r = 0.1x², and thickness dx. The π can’t be dropped.'}},
+    {id:'vo4',topic:'Evaluating a volume',
+     talk:'Ask why the answer has a π in it.',
+     prompt:ALL('Evaluate it: π times the integral of 0.01x⁴ from 0 to 10.'),
+     s1:{label:'Step 1: What is the volume?',opts:function(c){return ['62.8 '+c.vol.vu,'628.3 '+c.vol.vu,'200 '+c.vol.vu]},correct:1},
+     s2:{label:'Step 2: How do you get it?',opts:['The antiderivative is 0.002x⁵. At 10 that is 200, then multiply by π','Skip the π','Plug in x = 10 without integrating'],correct:0},
+     explain:function(){return 'The antiderivative of 0.01x⁴ is 0.002x⁵. At 10 that is 200, and at 0 it is 0, so V = 200π ≈ 628.3. Dropping the π gives 200.'}}
+  ]
+},
+{
+  id:'total',unit:6,title:'Total change and average value',
+  summary:'The integral gives the total, and dividing by the time gives the steady rate that matches it.',
+  why:{
+    general:'You often need two numbers from a changing rate: the total that piled up, and the single steady rate that would have given the same total. The first is the integral. The second is the average value, the integral divided by the time.',
+    mechanical:'From a motor’s changing power you need two numbers: the total energy used, and the single steady power that would have used the same energy. The first is the integral. The second is the average value, the integral divided by the time.',
+    civil:'From a storm’s changing inflow you need two numbers: the total volume that arrived, and the single steady inflow that would have delivered the same volume. The first is the integral. The second is the average value, the integral divided by the time.'
+  },
+  visual:'tot',
+  caption:'Slide the height of the rectangle until its area matches the area under the curve. That height is the average value.',
+  use:[
+    'A rate is given and the total change over an interval is wanted.',
+    'The problem says “on average over”, “steady rate that would give the same total”, or “mean value”.',
+    'You have a formula for the rate and an interval to work over.'
+  ],
+  notuse:[
+    'You only have two readings and want the average rate. No integral needed.',
+    'You want the rate at one moment. That is a derivative.',
+    'A region between curves or a solid is involved. Use slicing for those.'
+  ],
+  test:'Total change: integrate the rate. Average value: that total divided by the length of the interval.',
+  questions:[
+    {id:'t1',topic:'Total from a rate formula',
+     talk:'Ask how they know a problem wants a total and not a rate.',
+     prompt:T3('A drone’s speed is given by a formula. How far did it fly in total? What kind of problem is this?','A motor’s power is given by a formula. How much energy did it use in total? What kind of problem is this?','A reservoir’s inflow is given by a formula. How much water arrived in total? What kind of problem is this?'),
+     s1:{label:'Step 1: Which kind?',opts:U6,correct:2},
+     s2:{label:'Step 2: Why?',opts:['A rate is given and a total is wanted, so integrate it over the interval','Two curves bound a region','A force changes with distance'],correct:0},
+     explain:function(){return 'A rate is given and its total is wanted. Integrate the rate over the interval to get the total change.'}},
+    {id:'t2',topic:'Average value versus total',
+     talk:'Ask how the average value differs from the total, and how they are connected.',
+     prompt:T3('Same flight. What single steady speed would cover the same distance in the same time? What kind of problem is this?','Same shift. What single steady power would use the same energy in the same time? What kind of problem is this?','Same storm. What single steady inflow would deliver the same volume in the same time? What kind of problem is this?'),
+     s1:{label:'Step 1: Which kind?',opts:U6,correct:3},
+     s2:{label:'Step 2: Why?',opts:['It asks for the best value','It asks for one steady value that matches the total, so divide the integral by the time','It asks for the volume of a solid'],correct:1},
+     explain:function(){return 'A single steady value that gives the same total is the average value: the integral divided by the length of the interval.'}},
+    {id:'t3',topic:'Computing a total change',
+     talk:'Ask why multiplying the end rate by the time overshoots when the rate has been climbing.',
+     prompt:ALL('A rate is r(t) = 2t, from t = 0 to t = 6. What is the total change?'),
+     s1:{label:'Step 1: What is the total?',opts:['12','36','72'],correct:1},
+     s2:{label:'Step 2: How do you get it?',opts:['Multiply 2t by 6','Integrate: the antiderivative t² evaluated from 0 to 6 is 36','Take the derivative of 2t'],correct:1},
+     explain:function(){return 'The antiderivative of 2t is t². Evaluate from 0 to 6: 36 − 0 = 36. Multiplying the end rate by the time (12 × 6 = 72) overshoots, because the rate started at zero.'}},
+    {id:'t4',topic:'Computing an average value',
+     talk:'Ask why the average is lower than the end value when the rate is climbing.',
+     prompt:ALL('Same rate, r(t) = 2t on the interval from 0 to 6. What is its average value?'),
+     s1:{label:'Step 1: What is the average?',opts:['36','6','12'],correct:1},
+     s2:{label:'Step 2: How do you get it?',opts:['Take the value at the end','Use the total itself','Divide the total by the length of the interval: 36 ÷ 6'],correct:2},
+     explain:function(){return 'Average value = total ÷ interval length = 36 ÷ 6 = 6. The end value, 12, is higher because the rate was climbing the whole time.'}}
+  ]
+},
+{
+  id:'work',unit:6,title:'Work from a changing force',
+  summary:'Slice the distance, multiply each slice by its force, and add them up.',
+  why:{
+    general:'Work is force times distance, but only when the force is steady. A spring pushes back harder the farther you stretch it, so the force changes along the way. Slice the distance into thin pieces where the force is nearly steady, and add them up.',
+    mechanical:'A valve spring pushes back harder the more it is compressed, so the work to compress it isn’t one force times one distance. Slice the distance into thin pieces, multiply each by its force, and add them up.',
+    civil:'A spring-loaded bearing resists more the more it is compressed, so the work done on it isn’t one force times one distance. Slice the distance into thin pieces, multiply each by its force, and add them up.'
+  },
+  visual:'wrk',
+  caption:'Slide the stretch. The shaded triangle is the work done so far: force on the vertical axis, distance on the horizontal.',
+  use:[
+    'The force changes as the object moves, like a spring.',
+    'The problem asks for “work done”.',
+    'You can write the force as a formula in the distance moved.'
+  ],
+  notuse:[
+    'The force is constant. Work is just force times distance.',
+    'You want how fast work is done. That is power, a rate.',
+    'No force or distance is involved.'
+  ],
+  test:'Constant force: multiply. Changing force: slice the distance, multiply each slice by its force, and add them up.',
+  questions:[
+    {id:'w1',topic:'Spotting a work problem',
+     talk:'Ask what makes work need an integral instead of one multiplication.',
+     prompt:T3('A spring pushes back harder the more you stretch it: F = 4x newtons, x in meters. You stretch it from 0 to 3 m. How much work is done? What kind of problem is this?','A valve spring pushes back with F = 4x newtons, x in cm. You compress it from 0 to 3 cm. How much work is done? What kind of problem is this?','A bearing spring pushes back with F = 4x kilonewtons, x in meters. You compress it from 0 to 3 m. How much work is done? What kind of problem is this?'),
+     s1:{label:'Step 1: Which kind?',opts:U6,correct:4},
+     s2:{label:'Step 2: Why?',opts:['The answer is a rate','Two curves bound a region','The force changes with distance, so the work is the integral of force over the distance'],correct:2},
+     explain:function(){return 'The force changes as the spring moves, so one force times one distance won’t work. The work is the integral of force over distance.'}},
+    {id:'w2',topic:'A constant force needs no integral',
+     talk:'Ask when work is just force times distance.',
+     prompt:T3('A winch pulls a crate with a steady 50 N for 6 m. What is the work, and what is the right tool?','A hydraulic ram pushes with a steady 50 N for 6 cm. What is the work, and what is the right tool?','A crane pulls with a steady 50 kN for 6 m. What is the work, and what is the right tool?'),
+     s1:{label:'Step 1: Which tool?',opts:W_OPTS,correct:1},
+     s2:{label:'Step 2: Why?',opts:['Every work problem needs an integral','A constant force needs no slicing: work = force × distance = 300','Work is a rate, so take a derivative'],correct:1},
+     explain:function(){return 'With a constant force, work = force × distance = 50 × 6 = 300. Integrals are for forces that change.'}},
+    {id:'w3',topic:'Integrating a changing force',
+     talk:'Ask why the work isn’t just the final force times the distance.',
+     prompt:T3('For F = 4x newtons, what is the work done stretching the spring from 0 to 3 m?','For F = 4x newtons, what is the work done compressing the spring from 0 to 3 cm?','For F = 4x kilonewtons, what is the work done compressing the bearing from 0 to 3 m?'),
+     s1:{label:'Step 1: What is the work?',opts:function(c){return ['12 '+c.wrk.wu,'18 '+c.wrk.wu,'36 '+c.wrk.wu]},correct:1},
+     s2:{label:'Step 2: How do you get it?',opts:['Multiply the end force (12) by the distance (3)','Integrate 4x to get 2x², then evaluate: 18 − 0','Use only the force at the end'],correct:1},
+     explain:function(){return 'The antiderivative of 4x is 2x². From 0 to 3 that is 18. Multiplying the end force by the distance (36) assumes the force was always that large.'}},
+    {id:'w4',topic:'Starting somewhere other than zero',
+     talk:'Ask why a stretch that starts at 1 takes less work than one that starts at 0.',
+     prompt:T3('The same spring is already stretched 1 m. How much work does it take to stretch it from 1 m to 3 m?','The same spring is already compressed 1 cm. How much work does it take to compress it from 1 cm to 3 cm?','The same bearing spring is already compressed 1 m. How much work does it take to compress it from 1 m to 3 m?'),
+     s1:{label:'Step 1: What is the work?',opts:function(c){return ['18 '+c.wrk.wu,'16 '+c.wrk.wu,'12 '+c.wrk.wu]},correct:1},
+     s2:{label:'Step 2: How do you get it?',opts:['Evaluate 2x² at 3 and at 1, then subtract: 18 − 2','Evaluate at 3 only','Subtract the forces: 12 − 4'],correct:0},
+     explain:function(){return '2x² at 3 is 18 and at 1 is 2, so the work is 16. Starting from 0 would count the first stretch too, which gives 18.'}}
+  ]
+}
+];
+function lessonById(id){for(var i=0;i<LESSONS.length;i++)if(LESSONS[i].id===id)return LESSONS[i];return null}
+
+/* ---------- State and saving ---------- */
+var store={
+  get:function(){try{var r=localStorage.getItem('cfe-v1');return r?JSON.parse(r):null}catch(e){return null}},
+  set:function(v){try{localStorage.setItem('cfe-v1',JSON.stringify(v))}catch(e){}}
+};
+var saved=store.get()||{};
+var state={
+  track:CTX[saved.track]?saved.track:'general',
+  progress:(saved.progress&&typeof saved.progress==='object')?saved.progress:{}
+};
+var ui={view:'home',lessonId:null,step:0,pq:null,resetAsk:false,raf:0,focus:null};
+function save(){store.set({track:state.track,progress:state.progress});scheduleSync()}
+function prog(id){if(!state.progress[id])state.progress[id]={steps:{},q:{}};if(!state.progress[id].steps)state.progress[id].steps={};if(!state.progress[id].q)state.progress[id].q={};return state.progress[id]}
+function lessonStatus(l,P){
+  var p=(P||state.progress)[l.id];if(!p)return 'new';
+  var all=l.questions.every(function(q){return p.q&&p.q[q.id]&&p.q[q.id].done});
+  if(all)return 'done';
+  var any=Object.keys(p.steps||{}).length||Object.keys(p.q||{}).length;
+  return any?'doing':'new';
+}
+var STATUS_LABEL={new:'Not started',doing:'In progress',done:'Finished'};
+function nextLesson(){
+  for(var i=0;i<LESSONS.length;i++)if(lessonStatus(LESSONS[i])!=='done')return {l:LESSONS[i],all:false};
+  return {l:LESSONS[0],all:true};
+}
+function curLesson(){return lessonById(ui.lessonId)}
+function newPQ(){return {qi:0,stage:1,wrong:{1:[],2:[]},first:true,tries:0,results:[]}}
+function num(n,d){
+  d=(d===undefined)?1:d;var f=Math.pow(10,d);
+  var v=Math.round(n*f)/f;if(v===0)v=0;
+  return v.toFixed(d).replace('-','−');
+}
+
+/* ---------- Family sync (optional Cloudflare Worker) ---------- */
+var CFG=window.CFE_CONFIG||{};
+var API=String(CFG.apiBase||'').replace(/\/+$/,'');
+var SYNC_KEY='cfe-sync-v1';
+function randomId(){
+  var a=new Uint8Array(10),out='';
+  if(window.crypto&&crypto.getRandomValues){crypto.getRandomValues(a)}else{for(var i=0;i<10;i++)a[i]=Math.floor(Math.random()*256)}
+  for(var j=0;j<a.length;j++)out+=('0'+a[j].toString(16)).slice(-2);
+  return out;
+}
+var syncCfg=(function(){try{var r=JSON.parse(localStorage.getItem(SYNC_KEY)||'null');return(r&&typeof r==='object')?r:{}}catch(e){return {}}})();
+if(!/^[a-z0-9]{8,32}$/.test(String(syncCfg.sid||'')))syncCfg.sid=randomId();
+function saveCfg(){try{localStorage.setItem(SYNC_KEY,JSON.stringify({code:syncCfg.code||'',name:syncCfg.name||'',sid:syncCfg.sid}))}catch(e){}}
+saveCfg();
+var sync={status:'idle',students:[],loaded:false,timer:0,busy:false,again:false,poll:0,msg:''};
+function esc(t){return String(t).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function mergeProgress(a,b){
+  var out={};a=a||{};b=b||{};
+  Object.keys(a).concat(Object.keys(b)).forEach(function(id){
+    if(out[id])return;
+    var pa=a[id]||{},pb=b[id]||{};
+    var steps=Object.assign({},pb.steps||{},pa.steps||{}),q={};
+    var qa=pa.q||{},qb=pb.q||{};
+    Object.keys(qa).concat(Object.keys(qb)).forEach(function(k){
+      if(q[k])return;
+      var x=qa[k],y=qb[k];
+      q[k]=!x?y:(!y?x:((y.runs||0)>(x.runs||0)?y:x));
+    });
+    out[id]={steps:steps,q:q};
+  });
+  return out;
+}
+function sameName(a,b){return String(a||'').trim().toLowerCase()===String(b||'').trim().toLowerCase()}
+var SYNC_NOTE={
+  off:'Saved on this device only.',
+  unlinked:'Saved on this device only. Use Family sync to share progress with a parent.',
+  viewer:'Linked to your family code. This device shows progress but doesn’t share its own.',
+  idle:'Linked to your family code.',
+  syncing:'Saving to your family code…',
+  synced:'Progress is saved to your family code.',
+  error:'Couldn’t reach the sync service. Progress is still saved on this device.'
+};
+function syncNoteKey(){
+  if(!API)return 'off';
+  if(!syncCfg.code)return 'unlinked';
+  if(!syncCfg.name)return 'viewer';
+  return sync.status;
+}
+function renderSyncNote(){var el=$('#sync-note');if(el)el.textContent=SYNC_NOTE[syncNoteKey()]||SYNC_NOTE.off}
+function canShare(){return !!(API&&syncCfg.code&&syncCfg.name)}
+async function api(method,path,body){
+  var res=await fetch(API+path,{method:method,headers:body?{'Content-Type':'application/json'}:{},body:body?JSON.stringify(body):undefined});
+  var data={};
+  try{data=await res.json()}catch(e){}
+  if(!res.ok){var err=new Error(data.error||('Request failed ('+res.status+')'));err.status=res.status;throw err}
+  return data;
+}
+function scheduleSync(){
+  if(!canShare())return;
+  clearTimeout(sync.timer);
+  sync.timer=setTimeout(function(){push()},900);
+}
+async function push(){
+  if(!canShare())return;
+  if(sync.busy){sync.again=true;return}
+  sync.busy=true;sync.status='syncing';renderSyncNote();
+  try{
+    await api('PUT','/api/family/'+encodeURIComponent(syncCfg.code)+'/student/'+syncCfg.sid,{name:syncCfg.name,track:state.track,progress:state.progress});
+    sync.status='synced';
+  }catch(e){sync.status='error'}
+  sync.busy=false;renderSyncNote();
+  if(sync.again){sync.again=false;scheduleSync()}
+}
+async function pullSameName(data){
+  var merged=state.progress;
+  (data.students||[]).forEach(function(s){
+    if(s&&s.progress&&sameName(s.name,syncCfg.name))merged=mergeProgress(merged,s.progress);
+  });
+  if(JSON.stringify(merged)!==JSON.stringify(state.progress)){
+    state.progress=merged;
+    store.set({track:state.track,progress:state.progress});
+  }
+}
+async function startSync(){
+  if(!API||!syncCfg.code)return;
+  try{
+    var data=await api('GET','/api/family/'+encodeURIComponent(syncCfg.code));
+    if(syncCfg.name){await pullSameName(data);await push()}
+  }catch(e){if(syncCfg.name)sync.status='error'}
+  renderSyncNote();
+  if(ui.view==='home'||ui.view==='parent')render(false);
+}
+async function refreshStudents(){
+  if(!API||!syncCfg.code)return;
+  try{
+    var d=await api('GET','/api/family/'+encodeURIComponent(syncCfg.code));
+    sync.students=d.students||[];sync.msg='';
+  }catch(e){
+    sync.msg=e.status===404?'That family code wasn’t found. Check it in Family sync.':'Couldn’t load progress right now. It will try again shortly.';
+  }
+  sync.loaded=true;
+  refreshParent();
+}
+function startPoll(){
+  if(sync.poll||!API||!syncCfg.code)return;
+  refreshStudents();
+  sync.poll=setInterval(function(){if(!document.hidden)refreshStudents()},60000);
+}
+function stopPoll(){if(sync.poll){clearInterval(sync.poll);sync.poll=0}}
+function refreshParent(){
+  if(ui.view!=='parent')return;
+  $('#app').innerHTML=parentView();renderSyncNote();
+}
+function setErr(m){var el=$('#sync-err');if(el)el.textContent=m||''}
+async function doCreate(){
+  setErr('');
+  try{
+    var d=await api('POST','/api/family');
+    syncCfg.code=d.code;saveCfg();sync.students=[];sync.loaded=false;
+    render(false);
+  }catch(e){setErr('Couldn’t create a code: '+e.message)}
+}
+async function doJoin(){
+  var code=($('#sync-code-in')||{}).value||'',name=(($('#sync-name-in')||{}).value||'').trim().slice(0,24);
+  if(!code.trim()||!name){setErr('Enter both the family code and a name.');return}
+  setErr('');
+  try{
+    var d=await api('GET','/api/family/'+encodeURIComponent(code.trim()));
+    syncCfg.code=d.code||code.trim();syncCfg.name=name;saveCfg();
+    await pullSameName(d);
+    sync.status='idle';
+    await push();
+    render(false);
+  }catch(e){setErr(e.status===404?'That code wasn’t found. Check it and try again.':'Couldn’t join: '+e.message)}
+}
+async function doName(){
+  var name=(($('#sync-name-in')||{}).value||'').trim().slice(0,24);
+  if(!name){setErr('Enter a name to share progress from this device.');return}
+  syncCfg.name=name;saveCfg();setErr('');
+  try{var d=await api('GET','/api/family/'+encodeURIComponent(syncCfg.code));await pullSameName(d)}catch(e){}
+  sync.status='idle';
+  await push();
+  render(false);
+}
+function doLeave(){
+  syncCfg.code='';syncCfg.name='';saveCfg();
+  stopPoll();sync.students=[];sync.loaded=false;sync.status='idle';
+  render(false);
+}
+function doCopy(btn){
+  var code=syncCfg.code||'';
+  function done(){btn.textContent='Copied'}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(code).then(done,function(){selectCode()})}
+  else selectCode();
+  function selectCode(){
+    var el=$('#sync-code');
+    if(el&&window.getSelection){var r=document.createRange();r.selectNodeContents(el);var s2=getSelection();s2.removeAllRanges();s2.addRange(r)}
+    btn.textContent='Press copy on your keyboard';
+  }
+}
+
+/* ---------- Views ---------- */
+function homeView(){
+  var c=CTX[state.track],nx=nextLesson();
+  var label=nx.all?'Review from the start':((lessonStatus(nx.l)==='new'?'Start: ':'Continue: ')+nx.l.title);
+  var h='<section class="hero"><h1 tabindex="-1">Learn why a tool exists, then when to use it.</h1>'+
+    '<p class="lede">Every lesson shows the idea moving, then asks you to pick the right tool and explain your choice before you calculate anything. Examples follow the '+c.label+' track, and you can switch tracks at any time.</p>'+
+    '<div class="cta"><button class="btn primary" data-act="open" data-id="'+nx.l.id+'">'+label+'</button></div><p class="fine" id="sync-note" style="margin-top:1rem"></p></section>';
+  h+='<h2 class="sec-h">Course map</h2><ol class="rail">';
+  UNITS.forEach(function(u){
+    var soon=u.lessons.length===0;
+    h+='<li class="'+(soon?'soon':'')+'"><span class="num" aria-hidden="true">'+u.id+'</span><h3>Unit '+u.id+': '+u.title+'</h3><p class="blurb">'+u.blurb+'</p>';
+    if(soon){h+='<p class="soon-note">Coming next.</p>'}
+    else{
+      h+='<ul class="lessons">';
+      u.lessons.forEach(function(id){
+        var l=lessonById(id),st=lessonStatus(l);
+        var btn=st==='new'?'Start':(st==='doing'?'Continue':'Review');
+        h+='<li class="lesson"><span class="chip '+st+'">'+STATUS_LABEL[st]+'</span><span><span class="lt2">'+l.title+'</span><span class="ls">'+l.summary+'</span></span>'+
+          '<button class="btn small" data-act="open" data-id="'+l.id+'">'+btn+'</button></li>';
+      });
+      h+='</ul>';
+    }
+    h+='</li>';
+  });
+  h+='</ol>';
+  return h;
+}
+
+var STEP_NAMES=['Why it exists','See it','When to use it','Practice'];
+function lessonView(){
+  var l=curLesson(),c=CTX[state.track],p=prog(l.id);
+  var h='<button class="back" data-act="home">Back to course</button>'+
+    '<h1 class="lt" tabindex="-1">'+l.title+'</h1>'+
+    '<p class="lede">Unit '+l.unit+', '+c.label+' track</p>';
+  h+='<ol class="steps">';
+  STEP_NAMES.forEach(function(n,i){
+    var seen=p.steps[i]&&i!==ui.step;
+    h+='<li><button data-act="step" data-i="'+i+'"'+(i===ui.step?' aria-current="step"':'')+'>'+(i+1)+'. '+n+(seen?'<span class="tick" aria-hidden="true">✓</span><span class="sr" style="position:absolute;left:-9999px">visited</span>':'')+'</button></li>';
+  });
+  h+='</ol><div class="panel">';
+  if(ui.step===0){
+    h+='<h2>Why it exists</h2><p class="big-why">'+l.why[state.track]+'</p>';
+  }else if(ui.step===1){
+    h+='<h2>See it</h2>'+VIS[l.visual].shell()+'<p class="caption">'+l.caption+'</p>';
+  }else if(ui.step===2){
+    h+='<h2>When to use it</h2><div class="cols"><div><h3>Reach for it when</h3><ul>'+l.use.map(function(t){return '<li>'+t+'</li>'}).join('')+'</ul></div>'+
+      '<div><h3>Look for a different tool when</h3><ul>'+l.notuse.map(function(t){return '<li>'+t+'</li>'}).join('')+'</ul></div></div>'+
+      '<p class="test"><strong>The one-line test.</strong> '+l.test+'</p>';
+  }else{
+    h+='<h2>Practice</h2>'+practiceView(l);
+  }
+  h+='</div>';
+  if(ui.step<3){
+    h+='<div class="pager"><span>'+(ui.step>0?'<button class="btn" data-act="step" data-i="'+(ui.step-1)+'">Back</button>':'')+'</span>'+
+       '<button class="btn primary" data-act="step" data-i="'+(ui.step+1)+'">'+(ui.step===2?'Go to practice':'Next: '+STEP_NAMES[ui.step+1])+'</button></div>';
+  }else{
+    h+='<div class="pager"><button class="btn" data-act="step" data-i="2">Back to “When to use it”</button><span></span></div>';
+  }
+  return h;
+}
+
+function optBlock(n,step,pq){
+  var opts=get(step.opts),locked=pq.stage>n,h='<fieldset class="q" data-n="'+n+'"><legend>'+step.label+'</legend>';
+  opts.forEach(function(o,i){
+    var isRight=i===step.correct,wrong=pq.wrong[n].indexOf(i)>=0,cls='opt',tag='';
+    if(locked&&isRight){cls+=' right';tag='Correct'}
+    else if(wrong){cls+=' wrong';tag='Not quite'}
+    h+='<button class="'+cls+'" data-act="answer" data-s="'+n+'" data-i="'+i+'"'+((locked||wrong)?' disabled':'')+'><span>'+o+'</span>'+(tag?'<span class="tag">'+tag+'</span>':'')+'</button>';
+  });
+  if(!locked&&pq.wrong[n].length)h+='<p class="hint" role="status">Not quite. Reread the question, look for clue words, and try again.</p>';
+  return h+'</fieldset>';
+}
+function practiceView(l){
+  var pq=ui.pq,c=CTX[state.track],h='';
+  if(!pq)pq=ui.pq=newPQ();
+  if(pq.qi>=l.questions.length){
+    var right=pq.results.filter(Boolean).length,miss=[];
+    pq.results.forEach(function(r,i){if(!r)miss.push(l.questions[i].topic)});
+    h+='<div class="sum"><h3 tabindex="-1">Practice complete</h3><p>You picked the right tool and reason on the first try for <strong>'+right+' of '+l.questions.length+'</strong> questions.</p>';
+    if(miss.length)h+='<p>Worth another look: '+miss.join('; ')+'.</p>';
+    else h+='<p>Nothing to revisit. Nice work.</p>';
+    h+='<div class="cta"><button class="btn primary" data-act="home">Back to course</button><button class="btn" data-act="again">Practice again</button></div></div>';
+    return h;
+  }
+  var q=l.questions[pq.qi];
+  h+='<p class="qmeta">Question '+(pq.qi+1)+' of '+l.questions.length+'</p><p class="prompt">'+q.prompt[state.track]+'</p>';
+  h+=optBlock(1,q.s1,pq);
+  if(pq.stage>=2)h+=optBlock(2,q.s2,pq);
+  if(pq.stage===3){
+    h+='<div class="explain" role="status"><h3>Why it works</h3><p>'+q.explain(c)+'</p></div>'+
+      '<div class="cta"><button class="btn primary" data-act="nextq">'+(pq.qi+1<l.questions.length?'Next question':'See results')+'</button></div>';
+  }
+  return h;
+}
+
+function progressTable(P){
+  var talk=[],h='<div class="tablewrap"><table><thead><tr><th>Lesson</th><th>Status</th><th>First-try answers</th><th>Worth another look</th></tr></thead><tbody>';
+  LESSONS.forEach(function(l){
+    var p=P[l.id]||{q:{}},st=lessonStatus(l,P),done=0,firsts=0,miss=[];
+    l.questions.forEach(function(q){
+      var r=p.q&&p.q[q.id];
+      if(r&&r.done){done++;if(r.first)firsts++;else{miss.push(q.topic);talk.push({lesson:l.title,t:q.talk})}}
+    });
+    h+='<tr><td><strong>Unit '+l.unit+': '+l.title+'</strong></td><td><span class="chip '+st+'">'+STATUS_LABEL[st]+'</span></td><td>'+(done?firsts+' of '+done+' answered':'Not yet')+'</td><td>'+(miss.length?miss.join('; '):(done?'Nothing flagged':'Not yet'))+'</td></tr>';
+  });
+  h+='</tbody></table></div>';
+  h+='<h3 style="margin:1.25rem 0 .4rem;font-size:1.1rem">Questions to talk about</h3>';
+  if(talk.length){h+='<ul class="talk">'+talk.map(function(x){return '<li>'+x.t+' <span class="fine">('+x.lesson+')</span></li>'}).join('')+'</ul>'}
+  else{h+='<p class="fine">Nothing flagged yet. Once the student works through practice, this list shows where a conversation would help most.</p>'}
+  return h;
+}
+function groupStudents(list){
+  var map={},order=[];
+  list.forEach(function(x){
+    if(!x)return;
+    var k=String(x.name||'').trim().toLowerCase()||x.id;
+    if(!map[k]){map[k]={name:x.name||'Student',track:x.track,updatedAt:x.updatedAt||0,progress:x.progress||{}};order.push(k)}
+    else{
+      var g=map[k];
+      g.progress=mergeProgress(g.progress,x.progress||{});
+      if((x.updatedAt||0)>g.updatedAt){g.updatedAt=x.updatedAt;g.track=x.track}
+    }
+  });
+  return order.map(function(k){return map[k]});
+}
+function studentBlock(st){
+  var P=st.progress||{},meta=[];
+  if(CTX[st.track])meta.push(CTX[st.track].label+' track');
+  if(st.updatedAt){meta.push('last active '+new Date(st.updatedAt).toLocaleString([],{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}))}
+  return '<section class="stu"><div class="stu-h"><h2>'+esc(st.name)+'</h2><span class="meta">'+meta.join(', ')+'</span></div>'+progressTable(P)+'</section>';
+}
+function parentView(){
+  var h='<h1 class="lt" tabindex="-1">Parent view</h1><p class="lede">See which lessons the student has finished and where they needed a second try. Practice counts as first try only when both the tool and the reason were right the first time.</p><p class="note" id="sync-note"></p>';
+  if(API&&syncCfg.code){
+    if(!sync.loaded){h+='<p class="fine" style="margin-top:1.5rem">Loading shared progress…</p>'}
+    else{
+      var groups=groupStudents(sync.students);
+      if(sync.msg)h+='<p class="hint" role="status" style="margin-top:1rem">'+esc(sync.msg)+'</p>';
+      if(!groups.length&&!sync.msg)h+='<p style="margin-top:1.5rem">No student progress has been saved yet. When the student joins with the family code and starts a lesson, it shows up here.</p>';
+      groups.sort(function(a,b){return (b.updatedAt||0)-(a.updatedAt||0)}).forEach(function(g){h+=studentBlock(g)});
+    }
+    h+='<div class="cta" style="margin-top:1.5rem"><button class="btn small" data-act="sync-refresh">Refresh now</button></div>';
+  }else{
+    h+=studentBlock({name:'This device',track:state.track,updatedAt:0,progress:state.progress});
+    if(API)h+='<p class="fine" style="margin-top:1rem">To see a student’s progress from another device, <button class="back" style="margin:0" data-act="sync">set up Family sync</button>.</p>';
+  }
+  h+='<div class="danger">';
+  if(ui.resetAsk){h+='<p>This clears the progress saved on this device'+(canShare()?' and in your family code':'')+' and can’t be undone.</p><div class="cta"><button class="btn primary" data-act="reset-yes">Clear my progress</button><button class="btn" data-act="reset-no">Cancel</button></div>'}
+  else{h+='<button class="btn small" data-act="reset-ask">Reset my progress</button>'}
+  h+='</div>';
+  return h;
+}
+function syncView(){
+  var h='<h1 class="lt" tabindex="-1">Family sync</h1><p class="lede">Share progress with a parent without any accounts. A family code links devices, and anyone who has the code can see lesson progress and which questions were missed. Nothing else is stored, and no email addresses.</p><p class="note" id="sync-note"></p>';
+  if(!API){
+    return h+'<p style="margin-top:1.5rem">Family sync isn’t turned on in this copy of the app, so progress stays on this device. Whoever runs the site can turn it on by adding the sync service address to <code>config.js</code>.</p>';
+  }
+  h+='<p class="hint" id="sync-err" role="status"></p>';
+  if(!syncCfg.code){
+    h+='<section class="stu"><h2>Parent: start a family</h2><p>Create a family code, then give it to your student. You only need to do this once.</p><div class="cta"><button class="btn primary" data-act="sync-create">Create a family code</button></div></section>'+
+       '<section class="stu"><h2>Student or second parent: join with a code</h2>'+
+       '<label class="field">Family code<input id="sync-code-in" type="text" maxlength="20" autocomplete="off" autocapitalize="characters" spellcheck="false" data-enter="sync-join"></label>'+
+       '<label class="field">Your first name (the parent sees this)<input id="sync-name-in" type="text" maxlength="24" autocomplete="off" data-enter="sync-join"></label>'+
+       '<div class="cta"><button class="btn primary" data-act="sync-join">Join</button></div><p class="fine">A parent who only wants to watch progress can type their own name here, or any name, and then skip lessons. Their device will show progress for everyone.</p></section>';
+  }else{
+    h+='<section class="stu"><h2>Your family code</h2><div class="codebox" id="sync-code">'+esc(syncCfg.code)+'</div><div class="cta" style="margin-top:0"><button class="btn small" data-act="sync-copy">Copy code</button></div><p class="fine">Give this code to your student and any other parent. Keep it private, because anyone with it can see progress.</p></section>';
+    h+='<section class="stu"><h2>This device</h2>';
+    if(syncCfg.name){
+      h+='<p>Sharing progress as <strong>'+esc(syncCfg.name)+'</strong>.</p>';
+    }else{
+      h+='<p>This device shows progress but doesn’t share its own. To share from this device, add a student name.</p>'+
+         '<label class="field">Student’s first name<input id="sync-name-in" type="text" maxlength="24" autocomplete="off" data-enter="sync-name"></label>'+
+         '<div class="cta"><button class="btn primary" data-act="sync-name">Start sharing from this device</button></div>';
+    }
+    h+='<div class="cta"><button class="btn small" data-act="sync-leave">Leave this family</button></div><p class="fine">Leaving doesn’t delete anything. Progress stays on this device, and the family keeps what was already shared.</p></section>';
+  }
+  return h;
+}
+
+/* ---------- Graph widgets ---------- */
+var G={W:640,H:400,L:66,R:22,T:22,B:62};
+G.pw=G.W-G.L-G.R;G.ph=G.H-G.T-G.B;
+function X(x){return G.L+x/10*G.pw}
+function Y(y){return G.T+G.ph-y/10*G.ph}
+function baseSvg(c,label,ys){
+  var g='',k=ys||1;
+  for(var i=0;i<=10;i++){
+    g+='<line class="gl" x1="'+X(i)+'" y1="'+Y(0)+'" x2="'+X(i)+'" y2="'+Y(10)+'"/>';
+    g+='<line class="gl" x1="'+X(0)+'" y1="'+Y(i)+'" x2="'+X(10)+'" y2="'+Y(i)+'"/>';
+    if(i%2===0){
+      g+='<text class="tk" x="'+X(i)+'" y="'+(Y(0)+18)+'" text-anchor="middle">'+i+'</text>';
+      g+='<text class="tk" x="'+(X(0)-9)+'" y="'+(Y(i)+4)+'" text-anchor="end">'+(i*k)+'</text>';
+    }
+  }
+  g+='<line class="ax" x1="'+X(0)+'" y1="'+Y(0)+'" x2="'+X(10)+'" y2="'+Y(0)+'"/><line class="ax" x1="'+X(0)+'" y1="'+Y(0)+'" x2="'+X(0)+'" y2="'+Y(10)+'"/>';
+  g+='<text class="al" x="'+X(5)+'" y="'+(G.H-16)+'" text-anchor="middle">'+c.x+'</text>';
+  g+='<text class="al" transform="translate(16 '+Y(5)+') rotate(-90)" text-anchor="middle">'+c.y+'</text>';
+  return '<svg viewBox="0 0 '+G.W+' '+G.H+'" role="img" aria-label="'+label+'" xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="plot"><rect x="'+G.L+'" y="'+G.T+'" width="'+G.pw+'" height="'+G.ph+'"/></clipPath></defs>'+g;
+}
+function slopeShell(){
+  var c=CTX[state.track];
+  return '<div class="wrap" id="w-slope">'+baseSvg(c,'Graph with two draggable points, A and B, and the line through them')+
+    '<g clip-path="url(#plot)"><line class="sec" id="sl"/><path class="tri" id="tri"/></g>'+
+    '<text class="annot" id="runT" text-anchor="middle"></text><text class="annot" id="riseT"></text>'+
+    '<circle class="pt" id="pa" r="11" tabindex="0" aria-label="Point A. Use the arrow keys to move it."/>'+
+    '<circle class="pt" id="pb" r="11" tabindex="0" aria-label="Point B. Use the arrow keys to move it."/>'+
+    '<text class="lab" id="la" text-anchor="middle">A</text><text class="lab" id="lb" text-anchor="middle">B</text></svg></div>'+
+    '<div class="readout" id="ro-slope" aria-live="polite"></div>';
+}
+function initSlope(){
+  var root=$('#w-slope');if(!root)return;
+  var c=CTX[state.track],svg=$('svg',root);
+  var pa=$('#pa'),pb=$('#pb'),sl=$('#sl'),tri=$('#tri'),runT=$('#runT'),riseT=$('#riseT'),la=$('#la'),lb=$('#lb'),ro=$('#ro-slope');
+  var A={x:2,y:2},B={x:7,y:8},drag=null;
+  function snap(v){return Math.min(10,Math.max(0,Math.round(v*2)/2))}
+  function toData(e){
+    var pt=svg.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;
+    var p=pt.matrixTransform(svg.getScreenCTM().inverse());
+    return {x:snap((p.x-G.L)/G.pw*10),y:snap((G.T+G.ph-p.y)/G.ph*10)};
+  }
+  function draw(){
+    pa.setAttribute('cx',X(A.x));pa.setAttribute('cy',Y(A.y));
+    pb.setAttribute('cx',X(B.x));pb.setAttribute('cy',Y(B.y));
+    la.setAttribute('x',X(A.x));la.setAttribute('y',Y(A.y)-18);
+    lb.setAttribute('x',X(B.x));lb.setAttribute('y',Y(B.y)-18);
+    var dx=B.x-A.x,dy=B.y-A.y;
+    if(dx===0){
+      sl.setAttribute('x1',X(A.x));sl.setAttribute('x2',X(A.x));sl.setAttribute('y1',Y(0));sl.setAttribute('y2',Y(10));
+    }else{
+      var m=dy/dx;
+      sl.setAttribute('x1',X(0));sl.setAttribute('y1',Y(A.y-m*A.x));
+      sl.setAttribute('x2',X(10));sl.setAttribute('y2',Y(A.y+m*(10-A.x)));
+    }
+    tri.setAttribute('d','M'+X(A.x)+' '+Y(A.y)+' L'+X(B.x)+' '+Y(A.y)+' L'+X(B.x)+' '+Y(B.y));
+    runT.setAttribute('x',X((A.x+B.x)/2));runT.setAttribute('y',Y(A.y)+(dy<0?-8:19));
+    runT.textContent=dx===0?'':'run = '+num(dx)+' '+c.xu;
+    var right=B.x>8.5;
+    riseT.setAttribute('x',X(B.x)+(right?-9:9));riseT.setAttribute('text-anchor',right?'end':'start');
+    riseT.setAttribute('y',Y((A.y+B.y)/2)+4);
+    riseT.textContent=dy===0?'':'rise = '+num(dy)+' '+c.yu;
+    if(dx===0){ro.innerHTML='<p class="eq">The run is 0, so the slope is undefined.</p><p class="sub">Drag a point sideways to give the line a run.</p>'}
+    else{ro.innerHTML='<p class="eq">slope = rise ÷ run = '+num(dy)+' ÷ '+num(dx)+' = '+num(dy/dx,2)+' '+c.unit+'</p><p class="sub">'+(dy/dx>0?'The output grows as the input grows.':(dy/dx<0?'The output drops as the input grows.':'The output stays flat.'))+'</p>'}
+  }
+  function bind(el,pt){
+    el.addEventListener('pointerdown',function(e){drag=pt;el.setPointerCapture(e.pointerId);e.preventDefault()});
+    el.addEventListener('pointermove',function(e){if(drag!==pt)return;var d=toData(e);pt.x=d.x;pt.y=d.y;draw()});
+    var end=function(){drag=null};
+    el.addEventListener('pointerup',end);el.addEventListener('pointercancel',end);
+    el.addEventListener('keydown',function(e){
+      var k=e.key,dxm=0,dym=0;
+      if(k==='ArrowLeft')dxm=-.5;else if(k==='ArrowRight')dxm=.5;else if(k==='ArrowUp')dym=.5;else if(k==='ArrowDown')dym=-.5;else return;
+      e.preventDefault();pt.x=snap(pt.x+dxm);pt.y=snap(pt.y+dym);draw();
+    });
+  }
+  bind(pa,A);bind(pb,B);draw();
+}
+
+function f(x){return .1*x*x}
+function secantShell(){
+  var c=CTX[state.track],d='';
+  for(var x=0;x<=10.001;x+=.1){d+=(x===0?'M':'L')+X(x).toFixed(1)+' '+Y(f(x)).toFixed(1)+' '}
+  return '<div class="wrap" id="w-sec">'+baseSvg(c,'A curve with a fixed point P and a second point Q that slides toward it')+
+    '<path class="curve" d="'+d+'"/>'+
+    '<g clip-path="url(#plot)"><line class="tan" id="tan"/><line class="sec" id="sec"/><path class="tri" id="tri2"/></g>'+
+    '<circle class="pfix" id="pP" r="8"/><circle class="pt" id="pQ" r="9" style="cursor:default"/>'+
+    '<text class="lab" id="lP" text-anchor="middle">P</text><text class="lab" id="lQ" text-anchor="middle">Q</text>'+
+    '<text class="annot" id="hT" text-anchor="middle"></text></svg></div>'+
+    '<ul class="legend"><li><svg viewBox="0 0 36 10"><line class="sec" x1="0" y1="5" x2="36" y2="5"/></svg>Line through P and Q</li>'+
+    '<li><svg viewBox="0 0 36 10"><line class="tan" x1="0" y1="5" x2="36" y2="5"/></svg>Tangent at P (the target)</li></ul>'+
+    '<div class="controls"><div><label for="x0">Where P sits on the curve</label><input id="x0" type="range" min="1" max="7" step="0.1" value="4"></div>'+
+    '<div><label for="hs">Gap h between P and Q: <span id="hv"></span> '+c.xu+'</label><input id="hs" type="range" min="0" max="100" step="1" value="100"></div></div>'+
+    '<div class="cta" style="margin-top:.25rem"><button class="btn small" id="play" type="button">Shrink h</button></div>'+
+    '<div class="readout" id="ro-sec" aria-live="polite"></div>';
+}
+function initSecant(){
+  var root=$('#w-sec');if(!root)return;
+  var c=CTX[state.track];
+  var x0s=$('#x0'),hs=$('#hs'),hv=$('#hv'),play=$('#play'),ro=$('#ro-sec');
+  var tan=$('#tan'),sec=$('#sec'),tri=$('#tri2'),pP=$('#pP'),pQ=$('#pQ'),lP=$('#lP'),lQ=$('#lQ'),hT=$('#hT');
+  function hOf(s){return .02+2.98*Math.pow(s/100,2)}
+  function line(el,x0,m){
+    var y0=f(x0);
+    el.setAttribute('x1',X(0));el.setAttribute('y1',Y(y0-m*x0));
+    el.setAttribute('x2',X(10));el.setAttribute('y2',Y(y0+m*(10-x0)));
+  }
+  function draw(){
+    var x0=+x0s.value,h=hOf(+hs.value),x1=x0+h,y0=f(x0),y1=f(x1);
+    var ms=(y1-y0)/h,md=.2*x0;
+    pP.setAttribute('cx',X(x0));pP.setAttribute('cy',Y(y0));
+    pQ.setAttribute('cx',X(x1));pQ.setAttribute('cy',Y(y1));
+    lP.setAttribute('x',X(x0)-14);lP.setAttribute('y',Y(y0)+22);
+    lQ.setAttribute('x',X(x1)+(h<.25?16:0));lQ.setAttribute('y',Y(y1)-16);
+    line(tan,x0,md);line(sec,x0,ms);
+    tri.setAttribute('d','M'+X(x0)+' '+Y(y0)+' L'+X(x1)+' '+Y(y0)+' L'+X(x1)+' '+Y(y1));
+    hT.textContent=h>.5?'h = '+num(h,2)+' '+c.xu:'';
+    hT.setAttribute('x',X(x0+h/2));hT.setAttribute('y',Y(y0)+19);
+    hv.textContent=num(h,2);
+    var near=Math.abs(ms-md)<.012;
+    ro.innerHTML='<p class="eq">Slope between P and Q: '+num(ms,3)+' '+c.unit+'</p>'+
+      '<p class="eq">Slope at P (the derivative): '+num(md,3)+' '+c.unit+'</p>'+
+      '<p class="sub">'+(h<.15?'The two points are almost one point, so the slope between them is almost the derivative.':(near?'Close enough to read as the derivative.':'Slide h toward zero and watch the first number settle onto the second.'))+'</p>';
+    play.textContent=(+hs.value<1)?'Reset h':'Shrink h';
+  }
+  function setS(v){hs.value=Math.round(v*10)/10;draw()}
+  x0s.addEventListener('input',draw);hs.addEventListener('input',draw);
+  play.addEventListener('click',function(){
+    cancelAnimationFrame(ui.raf);
+    if(+hs.value<1){setS(100);return}
+    if(reduce){setS(0);return}
+    var from=+hs.value,t0=performance.now(),dur=2800;
+    function step(t){var k=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-k,2);setS(from*(1-e));if(k<1)ui.raf=requestAnimationFrame(step)}
+    ui.raf=requestAnimationFrame(step);
+  });
+  draw();
+}
+
+/* ---------- Limit widget ---------- */
+function limitShell(){
+  return '<div class="seg" id="lm-mode" role="radiogroup" aria-label="Limit example" style="display:inline-flex;margin:.25rem 0 .9rem"><button type="button" role="radio" data-m="point">Close in on a point</button><button type="button" role="radio" data-m="far">Look far out</button></div><div class="wrap" id="w-limit"></div>';
+}
+function initLimit(){
+  var root=$('#w-limit');if(!root)return;
+  var mode=ui.limitMode||'point',c=CTX[state.track];
+  $$('#lm-mode button').forEach(function(b){
+    b.setAttribute('aria-checked',b.dataset.m===mode?'true':'false');
+    b.addEventListener('click',function(){ui.limitMode=b.dataset.m;ui.focus='#lm-mode button[aria-checked="true"]';render(false)});
+  });
+  if(mode==='point')limitPoint(root);else limitFar(root,c);
+}
+function limitPoint(root){
+  var A=2,L=4;
+  var rows1='<tr><th>x</th>',rows2='<tr><th>f(x)</th>';
+  [1.9,1.99,1.999,2.001,2.01,2.1].forEach(function(x){rows1+='<td>'+x+'</td>';rows2+='<td>'+num(x+2,3)+'</td>'});
+  root.innerHTML=baseSvg({x:'input x',y:'output f(x)'},'Graph of f(x) with a hole at x = 2 and a point that slides toward the hole')+
+    '<path class="sec" d="M'+X(0)+' '+Y(2)+' L'+X(8)+' '+Y(10)+'"/><path class="tri" id="lm-g"/>'+
+    '<circle class="hole" cx="'+X(A)+'" cy="'+Y(L)+'" r="7"/><circle class="pt" id="lm-m" r="9" style="cursor:default"/>'+
+    '<text class="annot" x="'+(X(A)+14)+'" y="'+(Y(L)+22)+'">hole: f(2) is undefined</text></svg>'+
+    '<div class="controls"><div><label for="lm-s">Slide x toward 2, from the left or the right</label><input id="lm-s" type="range" min="-100" max="100" step="1" value="-100"></div></div>'+
+    '<div class="readout" id="ro-limit" aria-live="polite"></div>'+
+    '<div class="tablewrap"><table class="mini"><tbody>'+rows1+'</tr>'+rows2+'</tr></tbody></table></div>';
+  var s=$('#lm-s'),m=$('#lm-m'),g=$('#lm-g'),ro=$('#ro-limit');
+  function draw(){
+    var t=+s.value,sign=t<0?-1:1,d=sign*2*Math.pow(Math.abs(t)/100,2),x=A+d,y=x+2;
+    if(t===0){
+      m.setAttribute('display','none');g.setAttribute('d','');
+      ro.innerHTML='<p class="eq">x = 2 exactly: the formula gives 0 ÷ 0, so f(2) is undefined.</p><p class="sub">The limit still exists. Slide off 2 on either side and watch what f(x) heads toward.</p>';
+      return;
+    }
+    m.removeAttribute('display');
+    m.setAttribute('cx',X(x));m.setAttribute('cy',Y(y));
+    g.setAttribute('d','M'+X(x)+' '+Y(0)+' L'+X(x)+' '+Y(y)+' L'+X(0)+' '+Y(y));
+    ro.innerHTML='<p class="eq">x = '+num(x,4)+', coming from the '+(t<0?'left':'right')+'</p><p class="eq">f(x) = '+num(y,4)+'</p><p class="sub">'+(Math.abs(d)<.05?'The output is almost 4. As x closes in on 2 from either side, f(x) closes in on 4.':'Keep sliding toward the middle and watch f(x).')+'</p>';
+  }
+  s.addEventListener('input',draw);draw();
+}
+function limitFar(root,c){
+  var lim=c.lim,L=8;
+  function yv(t){return 8*(1-Math.exp(-t/2))}
+  var d='';for(var t=0;t<=10.001;t+=.1){d+=(t===0?'M':'L')+X(t).toFixed(1)+' '+Y(yv(t)).toFixed(1)+' '}
+  root.innerHTML=baseSvg(lim,'A curve that levels off toward a limit of 8 '+lim.yu)+
+    '<path class="curve" d="'+d+'"/><line class="tan" x1="'+X(0)+'" y1="'+Y(L)+'" x2="'+X(10)+'" y2="'+Y(L)+'"/>'+
+    '<text class="annot" x="'+(X(10)-6)+'" y="'+(Y(L)-9)+'" text-anchor="end">limit = '+L+' '+lim.yu+'</text>'+
+    '<path class="tri" id="lm-g"/><circle class="pt" id="lm-m" r="9" style="cursor:default"/></svg>'+
+    '<div class="controls"><div><label for="lm-s">How far out in time: <span id="lm-tv"></span> '+lim.xu+'</label><input id="lm-s" type="range" min="0" max="10" step="0.1" value="1"></div></div>'+
+    '<div class="readout" id="ro-limit" aria-live="polite"></div>';
+  var s=$('#lm-s'),m=$('#lm-m'),g=$('#lm-g'),ro=$('#ro-limit'),tv=$('#lm-tv');
+  function draw(){
+    var t=+s.value,y=yv(t);
+    m.setAttribute('cx',X(t));m.setAttribute('cy',Y(y));
+    g.setAttribute('d','M'+X(t)+' '+Y(0)+' L'+X(t)+' '+Y(y)+' L'+X(0)+' '+Y(y));
+    tv.textContent=num(t,1);
+    ro.innerHTML='<p class="eq">Value now: '+num(y,3)+' '+lim.yu+'</p><p class="eq">Gap from the limit: '+num(L-y,3)+' '+lim.yu+'</p><p class="sub">The curve never quite reaches '+L+', but it gets as close as you like. That settling value is the limit.</p>';
+  }
+  s.addEventListener('input',draw);draw();
+}
+
+/* ---------- Rules widget ---------- */
+function rulesShell(){
+  var h='<div class="picks" id="rl-pick" role="radiogroup" aria-label="Pick a function">';
+  RFUNCS.forEach(function(f,i){h+='<button type="button" role="radio" data-i="'+i+'">'+f.short+'</button>'});
+  return h+'</div><div id="rl-out"></div>';
+}
+function initRules(){
+  var out=$('#rl-out');if(!out)return;
+  function show(i){
+    ui.ruleIdx=i;var f=RFUNCS[i];
+    $$('#rl-pick button').forEach(function(b){b.setAttribute('aria-checked',+b.dataset.i===i?'true':'false')});
+    var h='<p class="fn">'+f.expr+'</p><div class="anat">';
+    f.pieces.forEach(function(p){h+=p.op?'<span class="op">'+p.op+'</span>':'<div class="piece"><span class="plabel">'+p.label+'</span>'+p.t+'</div>'});
+    h+='</div><p class="clue"><strong>Clue:</strong> '+f.clue+'</p>'+
+      '<div class="rulebox"><h3>'+f.rule+'</h3><p class="formula">'+f.formula+'</p><p>'+f.work+'</p><p><strong>Result:</strong> '+f.answer+'</p></div>'+
+      '<p class="shows"><strong>Where this shape shows up:</strong> '+f.ctx[state.track]+'</p>';
+    out.innerHTML=h;
+  }
+  $$('#rl-pick button').forEach(function(b){b.addEventListener('click',function(){show(+b.dataset.i)})});
+  show(ui.ruleIdx||0);
+}
+/* ---------- Unit 4 widgets ---------- */
+function optShell(){return '<div class="wrap" id="w-opt"></div>'}
+function initOpt(){
+  var root=$('#w-opt');if(!root)return;
+  var o=CTX[state.track].opt,d='';
+  for(var w=0;w<=10.001;w+=.1){d+=(w===0?'M':'L')+X(w).toFixed(1)+' '+Y(w*(10-w)/2.5).toFixed(1)+' '}
+  root.innerHTML=baseSvg({x:'width w ('+o.wu+')',y:'area ('+o.au+')'},'Area of a rectangle against its width, with the slope shown at one width',2.5)+
+    '<path class="curve" d="'+d+'"/><g clip-path="url(#plot)"><line class="tan" id="op-t"/></g><path class="tri" id="op-g"/>'+
+    '<circle class="pt" id="op-m" r="9" style="cursor:default"/></svg>'+
+    '<div class="controls"><div><label for="op-s">Width w: <span id="op-wv"></span> '+o.wu+'</label><input id="op-s" type="range" min="0" max="10" step="0.1" value="1.5"></div></div>'+
+    '<div class="readout" id="ro-opt" aria-live="polite"></div>';
+  var s=$('#op-s'),mk=$('#op-m'),t=$('#op-t'),g=$('#op-g'),ro=$('#ro-opt'),wv=$('#op-wv');
+  function draw(){
+    var w=+s.value,A=w*(10-w),y=A/2.5,m=(10-2*w)/2.5,sl=10-2*w;
+    mk.setAttribute('cx',X(w));mk.setAttribute('cy',Y(y));
+    t.setAttribute('x1',X(0));t.setAttribute('y1',Y(y-m*w));t.setAttribute('x2',X(10));t.setAttribute('y2',Y(y+m*(10-w)));
+    g.setAttribute('d','M'+X(w)+' '+Y(0)+' L'+X(w)+' '+Y(y));
+    wv.textContent=num(w,1);
+    var msg=Math.abs(sl)<.05?'The slope is zero. The area has leveled off at its highest point.':(sl>0?'The slope is positive: making the pen wider still adds area.':'The slope is negative: making the pen wider now loses area.');
+    ro.innerHTML='<p class="eq">width = '+num(w,1)+' '+o.wu+', other side = '+num(10-w,1)+' '+o.wu+'</p><p class="eq">area = '+num(A,2)+' '+o.au+'</p><p class="eq">slope dA/dw = 10 − 2w = '+num(sl,1)+'</p><p class="sub">'+msg+'</p>';
+  }
+  s.addEventListener('input',draw);draw();
+}
+function relShell(){return '<div class="wrap" id="w-rel"></div>'}
+function initRel(){
+  var root=$('#w-rel');if(!root)return;
+  var r0=CTX[state.track].rel,K=14,CX=190,CY=160,rate=.5;
+  root.innerHTML='<svg viewBox="0 0 380 330" role="img" aria-label="A circle whose radius grows at a steady rate, with a ring showing the new area added">'+
+    '<circle id="rl-o" class="ring" cx="'+CX+'" cy="'+CY+'"/><circle id="rl-i" class="disc" cx="'+CX+'" cy="'+CY+'"/>'+
+    '<line id="rl-l" class="tri" x1="'+CX+'" y1="'+CY+'" y2="'+CY+'"/><circle cx="'+CX+'" cy="'+CY+'" r="3.5" class="pfix"/>'+
+    '<text id="rl-t" class="lab" text-anchor="middle"></text>'+
+    '<text class="annot" x="'+CX+'" y="322" text-anchor="middle">yellow ring: new area in the next 1 '+r0.tu+'</text></svg>'+
+    '<div class="controls"><div><label for="rl-s">Radius r: <span id="rl-rv"></span> '+r0.ru+'</label><input id="rl-s" type="range" min="1" max="10" step="0.5" value="2"></div></div>'+
+    '<div class="readout" id="ro-rel" aria-live="polite"></div>';
+  var s=$('#rl-s'),o=$('#rl-o'),i=$('#rl-i'),l=$('#rl-l'),t=$('#rl-t'),rv=$('#rl-rv'),ro=$('#ro-rel');
+  function draw(){
+    var r=+s.value;
+    o.setAttribute('r',(r+rate)*K);i.setAttribute('r',r*K);
+    l.setAttribute('x2',CX+r*K);
+    t.setAttribute('x',CX+r*K/2);t.setAttribute('y',CY-10);t.textContent='r = '+num(r,1)+' '+r0.ru;
+    rv.textContent=num(r,1);
+    ro.innerHTML='<p class="eq">radius r = '+num(r,1)+' '+r0.ru+', growing '+rate+' '+r0.ru+'/'+r0.tu+' (given)</p>'+
+      '<p class="eq">area A = πr² = '+num(Math.PI*r*r,1)+' '+r0.ru+'²</p>'+
+      '<p class="eq">dA/dt = 2πr · dr/dt = 2π('+num(r,1)+')('+rate+') = '+num(2*Math.PI*r*rate,2)+' '+r0.ru+'²/'+r0.tu+'</p>'+
+      '<p class="sub">The radius grows at the same pace every time, but the area grows faster the bigger the circle gets.</p>';
+  }
+  s.addEventListener('input',draw);draw();
+}
+function motShell(){return '<div class="wrap" id="w-mot"></div>'}
+function initMot(){
+  var root=$('#w-mot');if(!root)return;
+  var m=CTX[state.track].mot,d='';
+  function sf(t){return -.4*t*t+4*t}
+  for(var t0=0;t0<=10.001;t0+=.1){d+=(t0===0?'M':'L')+X(t0).toFixed(1)+' '+Y(sf(t0)).toFixed(1)+' '}
+  root.innerHTML=baseSvg({x:'time (s)',y:m.y},'Position of a '+m.what+' against time, with its slope shown at one moment')+
+    '<path class="curve" d="'+d+'"/><g clip-path="url(#plot)"><line class="tan" id="mo-t"/></g><path class="tri" id="mo-g"/>'+
+    '<circle class="pt" id="mo-m" r="9" style="cursor:default"/></svg>'+
+    '<div class="controls"><div><label for="mo-s">Time: <span id="mo-tv"></span> s</label><input id="mo-s" type="range" min="0" max="10" step="0.1" value="1"></div></div>'+
+    '<div class="readout" id="ro-mot" aria-live="polite"></div>';
+  var s=$('#mo-s'),mk=$('#mo-m'),tl=$('#mo-t'),g=$('#mo-g'),ro=$('#ro-mot'),tv=$('#mo-tv');
+  function draw(){
+    var t=+s.value,y=sf(t),v=-.8*t+4;
+    mk.setAttribute('cx',X(t));mk.setAttribute('cy',Y(y));
+    tl.setAttribute('x1',X(0));tl.setAttribute('y1',Y(y-v*t));tl.setAttribute('x2',X(10));tl.setAttribute('y2',Y(y+v*(10-t)));
+    g.setAttribute('d','M'+X(t)+' '+Y(0)+' L'+X(t)+' '+Y(y));
+    tv.textContent=num(t,1);
+    var msg=Math.abs(v)<.05?'Velocity is zero: the '+m.what+' has stopped for an instant to turn around.':(v>0?'Velocity is positive, but the acceleration is negative, so the '+m.what+' is slowing down.':'Velocity is negative, so the position is dropping: the '+m.what+' is moving backward and speeding up.');
+    ro.innerHTML='<p class="eq">position s = '+num(y,2)+' '+m.pu+'</p><p class="eq">velocity v = slope of s = '+num(v,2)+' '+m.vu+'</p><p class="eq">acceleration a = slope of v = −0.8 '+m.au+'</p><p class="sub">'+msg+'</p>';
+  }
+  s.addEventListener('input',draw);draw();
+}
+/* ---------- Unit 5 and 6 widgets ---------- */
+function initStrips(cfg){
+  var root=$('#'+cfg.id);if(!root)return;
+  var d1='',d2='';
+  for(var t=0;t<=10.001;t+=.1){
+    d1+=(t===0?'M':'L')+X(t).toFixed(1)+' '+Y(cfg.top(t)).toFixed(1)+' ';
+    if(cfg.bot)d2+=(t===0?'M':'L')+X(t).toFixed(1)+' '+Y(cfg.bot(t)).toFixed(1)+' ';
+  }
+  root.innerHTML=baseSvg(cfg.axes,cfg.label)+'<path class="strip" id="st-p"/><path class="curve" d="'+d1+'"/>'+(cfg.bot?'<path class="curve" d="'+d2+'"/>':'')+'</svg>'+
+    '<div class="controls"><div><label for="st-s">Number of '+cfg.what+': <span id="st-nv"></span></label><input id="st-s" type="range" min="1" max="40" step="1" value="'+cfg.nDef+'"></div></div>'+
+    '<div class="readout" id="ro-st" aria-live="polite"></div>';
+  var s=$('#st-s'),pth=$('#st-p'),nv=$('#st-nv'),ro=$('#ro-st');
+  function draw(){
+    var n=+s.value,w=10/n,sum=0,d='';
+    for(var i=0;i<n;i++){
+      var x0=i*w,xs=cfg.mode==='left'?x0:x0+w/2,tp=cfg.top(xs),bt=cfg.bot?cfg.bot(xs):0;
+      sum+=(tp-bt)*w;
+      d+='M'+X(x0).toFixed(1)+' '+Y(tp).toFixed(1)+' L'+X(x0+w).toFixed(1)+' '+Y(tp).toFixed(1)+' L'+X(x0+w).toFixed(1)+' '+Y(bt).toFixed(1)+' L'+X(x0).toFixed(1)+' '+Y(bt).toFixed(1)+' Z ';
+    }
+    pth.setAttribute('d',d);nv.textContent=n;
+    ro.innerHTML='<p class="eq">'+n+' '+cfg.what+', each '+num(w,2)+' wide</p><p class="eq">sum of the '+cfg.what+' = '+num(sum,2)+' '+cfg.au+'</p><p class="eq">exact total = '+num(cfg.exact,2)+' '+cfg.au+', off by '+num(Math.abs(cfg.exact-sum),2)+'</p><p class="sub">'+cfg.sub+'</p>';
+  }
+  s.addEventListener('input',draw);draw();
+}
+function riemShell(){return '<div class="wrap" id="w-riem"></div>'}
+function initRiem(){
+  var a=CTX[state.track].acc;
+  initStrips({id:'w-riem',axes:{x:a.x,y:a.y},label:'A rate curve with left-edge bars that add up to the total',top:function(t){return .1*t*t},bot:null,mode:'left',nDef:4,what:'slices',au:a.au,exact:100/3,
+    sub:'Because the rate keeps rising, left-edge bars stay under the curve and the sum runs low. More slices shrink the gap.'});
+}
+function btwShell(){return '<div class="wrap" id="w-btw"></div>'}
+function initBtw(){
+  var b=CTX[state.track].btw;
+  initStrips({id:'w-btw',axes:{x:b.x,y:b.y},label:'A '+b.what+' between two curves, cut into strips',top:function(t){return t},bot:function(t){return .1*t*t},mode:'mid',nDef:5,what:'strips',au:b.au,exact:50/3,
+    sub:'Each strip is as tall as top minus bottom. More strips mean a closer fit to the region.'});
+}
+function ftcShell(){return '<div class="wrap" id="w-ftc"></div>'}
+function initFtc(){
+  var root=$('#w-ftc');if(!root)return;
+  var a=CTX[state.track].acc,d1='',d2='';
+  for(var t=0;t<=10.001;t+=.1){
+    d1+=(t===0?'M':'L')+X(t).toFixed(1)+' '+Y(.1*t*t).toFixed(1)+' ';
+    d2+=(t===0?'M':'L')+X(t).toFixed(1)+' '+Y(t*t*t/30/3.5).toFixed(1)+' ';
+  }
+  root.innerHTML=baseSvg({x:a.x,y:a.y},'The rate curve with the area so far shaded')+
+    '<path class="strip" id="ft-a"/><path class="curve" d="'+d1+'"/><circle class="pt" id="ft-m1" r="8" style="cursor:default"/></svg>'+
+    baseSvg({x:a.x,y:'running total ('+a.au+')'},'The running total curve, with its slope shown at one moment',3.5)+
+    '<path class="curve" d="'+d2+'"/><g clip-path="url(#plot)"><line class="tan" id="ft-t"/></g><circle class="pt" id="ft-m2" r="8" style="cursor:default"/></svg>'+
+    '<div class="controls"><div><label for="ft-s">How far along: <span id="ft-xv"></span></label><input id="ft-s" type="range" min="0" max="10" step="0.1" value="4"></div></div>'+
+    '<div class="readout" id="ro-ftc" aria-live="polite"></div>';
+  var s=$('#ft-s'),ar=$('#ft-a'),m1=$('#ft-m1'),m2=$('#ft-m2'),tl=$('#ft-t'),xv=$('#ft-xv'),ro=$('#ro-ftc');
+  function draw(){
+    var x=+s.value,A=x*x*x/30,f=.1*x*x,y2=A/3.5,m=f/3.5,d='M'+X(0)+' '+Y(0)+' ';
+    for(var u=0;u<=x+1e-9;u+=.1){d+='L'+X(u).toFixed(1)+' '+Y(.1*u*u).toFixed(1)+' '}
+    d+='L'+X(x)+' '+Y(.1*x*x)+' L'+X(x)+' '+Y(0)+' Z';
+    ar.setAttribute('d',d);
+    m1.setAttribute('cx',X(x));m1.setAttribute('cy',Y(f));
+    m2.setAttribute('cx',X(x));m2.setAttribute('cy',Y(y2));
+    tl.setAttribute('x1',X(0));tl.setAttribute('y1',Y(y2-m*x));tl.setAttribute('x2',X(10));tl.setAttribute('y2',Y(y2+m*(10-x)));
+    xv.textContent=num(x,1);
+    ro.innerHTML='<p class="eq">running total so far = '+num(A,2)+' '+a.au+'</p><p class="eq">rate at this moment = '+num(f,2)+'</p><p class="eq">slope of the running total = '+num(f,2)+'</p><p class="sub">The slope of the bottom curve always equals the height of the top curve. The total grows as fast as the rate being added.</p>';
+  }
+  s.addEventListener('input',draw);draw();
+}
+function antiShell(){
+  var h='<div class="picks" id="an-pick" role="radiogroup" aria-label="Pick a rate">';
+  AFUNCS.forEach(function(f,i){h+='<button type="button" role="radio" data-i="'+i+'">'+f.short+'</button>'});
+  return h+'</div><div id="an-out"></div>';
+}
+function initAnti(){
+  var out=$('#an-out');if(!out)return;
+  function show(i){
+    ui.antiIdx=i;var f=AFUNCS[i];
+    $$('#an-pick button').forEach(function(b){b.setAttribute('aria-checked',+b.dataset.i===i?'true':'false')});
+    out.innerHTML='<p class="fn">'+f.expr+'</p>'+
+      '<div class="rulebox"><h3>'+f.rule+'</h3><p class="formula">'+f.formula+'</p><p>'+f.work+'</p><p>'+f.check+'</p></div>'+
+      '<div class="rulebox"><h3>Evaluate at the two ends</h3><p class="formula">'+f.evalu+'</p><p><strong>Result:</strong> '+f.answer+'</p></div>'+
+      '<p class="shows"><strong>Where this shape shows up:</strong> '+f.ctx[state.track]+'</p>';
+  }
+  $$('#an-pick button').forEach(function(b){b.addEventListener('click',function(){show(+b.dataset.i)})});
+  show(ui.antiIdx||0);
+}
+function volShell(){return '<div class="wrap" id="w-vol"></div>'}
+function initVol(){
+  var root=$('#w-vol');if(!root)return;
+  var v=CTX[state.track].vol,OX=60,OY=205,SX=54,SY=18;
+  function f(x){return .1*x*x}
+  var top='',bot='',ticks='';
+  for(var x=0;x<=10.001;x+=.1){var px=(OX+x*SX).toFixed(1);top+=(x===0?'M':'L')+px+' '+(OY-f(x)*SY).toFixed(1)+' ';bot+=(x===0?'M':'L')+px+' '+(OY+f(x)*SY).toFixed(1)+' '}
+  for(var i=0;i<=10;i+=2){ticks+='<text class="tk" x="'+(OX+i*SX)+'" y="404" text-anchor="middle">'+i+'</text>'}
+  var xe=OX+10*SX;
+  root.innerHTML='<svg viewBox="0 0 640 420" role="img" aria-label="Profile of a '+v.what+' made by spinning a curve around the x-axis, with one thin disk highlighted">'+
+    '<path class="solid" d="'+top+'L'+xe+' '+OY+' L'+OX+' '+OY+' Z"/><path class="solid" d="'+bot+'L'+xe+' '+OY+' L'+OX+' '+OY+' Z"/>'+
+    '<path class="curve" d="'+top+'"/><path class="curve" d="'+bot+'"/>'+
+    '<line class="ax" x1="'+(OX-10)+'" y1="'+OY+'" x2="'+(xe+10)+'" y2="'+OY+'"/>'+
+    '<text class="annot" x="'+xe+'" y="'+(OY-8)+'" text-anchor="end">axis of rotation</text>'+ticks+
+    '<text class="al" x="'+(OX+5*SX)+'" y="418" text-anchor="middle">distance along the axis ('+v.u+')</text>'+
+    '<ellipse id="vo-e" class="pt" rx="8" cy="'+OY+'" style="cursor:default"/><line id="vo-r" class="sec"/></svg>'+
+    '<div class="controls"><div><label for="vo-s">Position x: <span id="vo-xv"></span> '+v.u+'</label><input id="vo-s" type="range" min="0" max="10" step="0.1" value="6"></div></div>'+
+    '<div class="readout" id="ro-vol" aria-live="polite"></div>';
+  var s=$('#vo-s'),e=$('#vo-e'),l=$('#vo-r'),xv=$('#vo-xv'),ro=$('#ro-vol');
+  function draw(){
+    var x=+s.value,r=f(x),cx=OX+x*SX;
+    e.setAttribute('cx',cx);e.setAttribute('ry',Math.max(r*SY,.8));
+    l.setAttribute('x1',cx);l.setAttribute('x2',cx);l.setAttribute('y1',OY);l.setAttribute('y2',OY-r*SY);
+    xv.textContent=num(x,1);
+    ro.innerHTML='<p class="eq">radius r = 0.1x² = '+num(r,2)+' '+v.u+'</p><p class="eq">disk area = πr² = '+num(Math.PI*r*r,2)+' '+v.u+'²</p>'+
+      '<p class="sub">Adding up every disk from x = 0 to 10 gives V = π × the integral of (0.1x²)² dx = 200π ≈ 628.3 '+v.vu+'.</p>';
+  }
+  s.addEventListener('input',draw);draw();
+}
+function totShell(){return '<div class="wrap" id="w-tot"></div>'}
+function initTot(){
+  var root=$('#w-tot');if(!root)return;
+  var a=CTX[state.track].acc,d='';
+  for(var t=0;t<=10.001;t+=.1){d+=(t===0?'M':'L')+X(t).toFixed(1)+' '+Y(.1*t*t).toFixed(1)+' '}
+  root.innerHTML=baseSvg({x:a.x,y:a.y},'A rate curve with a rectangle whose height you adjust to match the area under the curve')+
+    '<path class="strip" id="av-r"/><path class="curve" d="'+d+'"/><line class="tan" id="av-l"/></svg>'+
+    '<div class="controls"><div><label for="av-s">Steady height h: <span id="av-hv"></span></label><input id="av-s" type="range" min="0" max="10" step="0.05" value="2"></div></div>'+
+    '<div class="readout" id="ro-tot" aria-live="polite"></div>';
+  var s=$('#av-s'),r=$('#av-r'),l=$('#av-l'),hv=$('#av-hv'),ro=$('#ro-tot');
+  function draw(){
+    var h=+s.value,area=h*10,exact=100/3,diff=area-exact;
+    r.setAttribute('d','M'+X(0)+' '+Y(0)+' L'+X(10)+' '+Y(0)+' L'+X(10)+' '+Y(h)+' L'+X(0)+' '+Y(h)+' Z');
+    l.setAttribute('x1',X(0));l.setAttribute('x2',X(10));l.setAttribute('y1',Y(h));l.setAttribute('y2',Y(h));
+    hv.textContent=num(h,2);
+    var msg=Math.abs(diff)<.4?'Matched. The steady height that gives the same total is the average value: '+num(exact,1)+' ÷ 10 = '+num(exact/10,2)+'.':(diff<0?'The rectangle holds less than the curve. Raise h.':'The rectangle holds more than the curve. Lower h.');
+    ro.innerHTML='<p class="eq">rectangle area = h × 10 = '+num(area,2)+' '+a.au+'</p><p class="eq">area under the curve = '+num(exact,2)+' '+a.au+'</p><p class="sub">'+msg+'</p>';
+  }
+  s.addEventListener('input',draw);draw();
+}
+function wrkShell(){return '<div class="wrap" id="w-wrk"></div>'}
+function initWrk(){
+  var root=$('#w-wrk');if(!root)return;
+  var w=CTX[state.track].wrk;
+  root.innerHTML=baseSvg({x:w.x,y:w.y},'Spring force against distance, with the work so far shaded')+
+    '<path class="strip" id="wk-a"/><path class="curve" d="M'+X(0)+' '+Y(0)+' L'+X(10)+' '+Y(10)+'"/><circle class="pt" id="wk-m" r="9" style="cursor:default"/></svg>'+
+    '<div class="controls"><div><label for="wk-s">Distance: <span id="wk-xv"></span> '+w.du+'</label><input id="wk-s" type="range" min="0" max="10" step="0.1" value="4"></div></div>'+
+    '<div class="readout" id="ro-wrk" aria-live="polite"></div>';
+  var s=$('#wk-s'),a=$('#wk-a'),m=$('#wk-m'),xv=$('#wk-xv'),ro=$('#ro-wrk');
+  function draw(){
+    var x=+s.value;
+    a.setAttribute('d','M'+X(0)+' '+Y(0)+' L'+X(x)+' '+Y(0)+' L'+X(x)+' '+Y(x)+' Z');
+    m.setAttribute('cx',X(x));m.setAttribute('cy',Y(x));
+    xv.textContent=num(x,1);
+    ro.innerHTML='<p class="eq">force now F = x = '+num(x,1)+' '+w.fu+'</p><p class="eq">work so far = area = ½ × '+num(x,1)+' × '+num(x,1)+' = '+num(x*x/2,2)+' '+w.wu+'</p><p class="sub">The force ramps up from zero, so the average force is half the final force. Here F = x; the questions use F = 4x.</p>';
+  }
+  s.addEventListener('input',draw);draw();
+}
+/* ---------- Unit 4 extra widgets ---------- */
+function crvShell(){return '<div class="wrap" id="w-crv"></div>'}
+function initCrv(){
+  var root=$('#w-crv');if(!root)return;
+  var c=CTX[state.track].crv,d='';
+  function f(x){return .08*x*x*x-1.2*x*x+4.8*x+1.6}
+  function f1(x){return .24*x*x-2.4*x+4.8}
+  function f2(x){return .48*x-2.4}
+  for(var t=0;t<=10.001;t+=.1){d+=(t===0?'M':'L')+X(t).toFixed(1)+' '+Y(f(t)).toFixed(1)+' '}
+  root.innerHTML=baseSvg({x:c.x,y:c.y},'A '+c.what+' with a point you slide along it and its slope line')+
+    '<path class="curve" d="'+d+'"/><g clip-path="url(#plot)"><line class="tan" id="cv-t"/></g><path class="tri" id="cv-g"/>'+
+    '<circle class="pt" id="cv-m" r="9" style="cursor:default"/></svg>'+
+    '<div class="controls"><div><label for="cv-s">Position: <span id="cv-xv"></span></label><input id="cv-s" type="range" min="0" max="10" step="0.1" value="1"></div></div>'+
+    '<div class="readout" id="ro-crv" aria-live="polite"></div>';
+  var s=$('#cv-s'),tl=$('#cv-t'),g=$('#cv-g'),mk=$('#cv-m'),xv=$('#cv-xv'),ro=$('#ro-crv');
+  function draw(){
+    var x=+s.value,y=f(x),a=f1(x),b=f2(x);
+    mk.setAttribute('cx',X(x));mk.setAttribute('cy',Y(y));
+    tl.setAttribute('x1',X(0));tl.setAttribute('y1',Y(y-a*x));tl.setAttribute('x2',X(10));tl.setAttribute('y2',Y(y+a*(10-x)));
+    g.setAttribute('d','M'+X(x)+' '+Y(0)+' L'+X(x)+' '+Y(y));
+    xv.textContent=num(x,1);
+    var dir=Math.abs(a)<.08?'flat for an instant':(a>0?'rising':'falling');
+    var bend=Math.abs(b)<.06?'the bend is flipping':(b>0?'bending up (a bowl shape)':'bending down (a hill shape)');
+    var msg='';
+    if(Math.abs(a)<.08)msg=b<0?'The slope is flat and the curve bends down, so this is a peak.':'The slope is flat and the curve bends up, so this is a valley.';
+    else if(Math.abs(b)<.06)msg='The bend flips here from one side to the other. This is an inflection point, and the slope is not zero.';
+    else msg='Slide toward where the slope line goes flat, then check which way the curve bends there.';
+    ro.innerHTML='<p class="eq">slope f′ = '+num(a,2)+': '+dir+'</p><p class="eq">bend f″ = '+num(b,2)+': '+bend+'</p><p class="sub">'+msg+'</p>';
+  }
+  s.addEventListener('input',draw);draw();
+}
+function linShell(){return '<div class="wrap" id="w-lin"></div>'}
+function initLin(){
+  var root=$('#w-lin');if(!root)return;
+  var c=CTX[state.track].lin,d='';
+  function f(x){return .1*x*x}
+  for(var t=0;t<=10.001;t+=.1){d+=(t===0?'M':'L')+X(t).toFixed(1)+' '+Y(f(t)).toFixed(1)+' '}
+  root.innerHTML=baseSvg({x:c.x,y:c.y},'A curve, its tangent line at a point, and the gap between them one step away')+
+    '<path class="curve" d="'+d+'"/><g clip-path="url(#plot)"><line class="tan" id="ln-t"/></g>'+
+    '<line class="sec" id="ln-e"/><circle class="pfix" id="ln-p" r="8"/><circle class="pt" id="ln-q" r="8" style="cursor:default"/><circle class="hole" id="ln-h" r="6"/></svg>'+
+    '<ul class="legend"><li>Filled dark dot: the known point</li><li>Yellow dot: the true value</li><li>Hollow dot: the tangent-line estimate</li></ul>'+
+    '<div class="controls"><div><label for="ln-a">Known point a: <span id="ln-av"></span></label><input id="ln-a" type="range" min="2" max="8" step="0.5" value="4"></div>'+
+    '<div><label for="ln-d">Step: <span id="ln-dv"></span></label><input id="ln-d" type="range" min="-2" max="2" step="0.1" value="0.5"></div></div>'+
+    '<div class="readout" id="ro-lin" aria-live="polite"></div>';
+  var sa=$('#ln-a'),sd=$('#ln-d'),tl=$('#ln-t'),er=$('#ln-e'),pp=$('#ln-p'),pq=$('#ln-q'),ph=$('#ln-h'),av=$('#ln-av'),dv=$('#ln-dv'),ro=$('#ro-lin');
+  function draw(){
+    var a=+sa.value,st=+sd.value,x=a+st,fa=f(a),m=.2*a,est=fa+m*st,act=f(x),err=act-est;
+    tl.setAttribute('x1',X(0));tl.setAttribute('y1',Y(fa-m*a));tl.setAttribute('x2',X(10));tl.setAttribute('y2',Y(fa+m*(10-a)));
+    pp.setAttribute('cx',X(a));pp.setAttribute('cy',Y(fa));
+    pq.setAttribute('cx',X(x));pq.setAttribute('cy',Y(act));
+    ph.setAttribute('cx',X(x));ph.setAttribute('cy',Y(est));
+    er.setAttribute('x1',X(x));er.setAttribute('x2',X(x));er.setAttribute('y1',Y(est));er.setAttribute('y2',Y(act));
+    av.textContent=num(a,1);dv.textContent=num(st,1);
+    var ae=Math.abs(err),msg=Math.abs(st)<.05?'No step, no error: the tangent line touches the curve at the known point.':(ae<.05?'Tiny error. The tangent line is a good stand-in for a step this small.':'The error grows as the step gets bigger, because the curve bends away from its tangent.');
+    ro.innerHTML='<p class="eq">known: f(a) = '+num(fa,2)+' '+c.yu+', slope f′(a) = '+num(m,2)+'</p><p class="eq">estimate = f(a) + f′(a) × step = '+num(est,3)+' '+c.yu+'</p><p class="eq">true value = '+num(act,3)+' '+c.yu+', error = '+num(ae,3)+'</p><p class="sub">'+msg+'</p>';
+  }
+  sa.addEventListener('input',draw);sd.addEventListener('input',draw);draw();
+}
+var VIS={
+  slope:{shell:slopeShell,init:initSlope},
+  secant:{shell:secantShell,init:initSecant},
+  limit:{shell:limitShell,init:initLimit},
+  rules:{shell:rulesShell,init:initRules},
+  opt:{shell:optShell,init:initOpt},
+  rel:{shell:relShell,init:initRel},
+  mot:{shell:motShell,init:initMot},
+  crv:{shell:crvShell,init:initCrv},
+  lin:{shell:linShell,init:initLin},
+  riem:{shell:riemShell,init:initRiem},
+  ftc:{shell:ftcShell,init:initFtc},
+  anti:{shell:antiShell,init:initAnti},
+  btw:{shell:btwShell,init:initBtw},
+  vol:{shell:volShell,init:initVol},
+  tot:{shell:totShell,init:initTot},
+  wrk:{shell:wrkShell,init:initWrk}
+};
+
+/* ---------- Render and events ---------- */
+function renderChrome(){
+  $$('.tracks .seg button').forEach(function(b){b.setAttribute('aria-checked',b.dataset.v===state.track?'true':'false')});
+  var cur=ui.view==='parent'?'parent':(ui.view==='sync'?'sync':'home');
+  ['home','parent','sync'].forEach(function(k){var el=$('#nav-'+k);if(!el)return;if(k===cur)el.setAttribute('aria-current','page');else el.removeAttribute('aria-current')});
+}
+function render(toTop){
+  cancelAnimationFrame(ui.raf);
+  var app=$('#app');
+  app.innerHTML=ui.view==='home'?homeView():(ui.view==='lesson'?lessonView():(ui.view==='sync'?syncView():parentView()));
+  renderChrome();renderSyncNote();
+  if(ui.view==='parent')startPoll();else stopPoll();
+  if(ui.view==='lesson'&&ui.step===1){VIS[curLesson().visual].init()}
+  if(toTop){window.scrollTo(0,0);if(!ui.focus)ui.focus='#app h1'}
+  if(ui.focus){var el=$(ui.focus);if(el)el.focus();ui.focus=null}
+}
+function markStep(id,i){prog(id).steps[i]=true;save()}
+function setStep(i){
+  ui.step=i;if(i===3)ui.pq=newPQ();
+  markStep(ui.lessonId,i);render(true);
+}
+function answer(s,i){
+  var l=curLesson(),pq=ui.pq;
+  if(!pq||pq.qi>=l.questions.length||pq.stage!==s)return;
+  var q=l.questions[pq.qi],step=s===1?q.s1:q.s2;
+  if(pq.wrong[s].indexOf(i)>=0)return;
+  if(i===step.correct){
+    if(s===1){pq.stage=2;ui.focus='fieldset.q[data-n="2"] .opt:not([disabled])'}
+    else{
+      pq.stage=3;
+      var p=prog(l.id),prev=p.q[q.id]||{};
+      p.q[q.id]={done:true,first:pq.first,tries:(prev.tries||0)+pq.tries,runs:(prev.runs||0)+1};
+      pq.results.push(pq.first);save();
+      ui.focus='[data-act="nextq"]';
+    }
+  }else{
+    pq.wrong[s].push(i);pq.first=false;pq.tries++;
+    ui.focus='fieldset.q[data-n="'+s+'"] .opt:not([disabled])';
+  }
+  render(false);
+}
+document.addEventListener('click',function(e){
+  var b=e.target.closest('[data-act]');if(!b)return;
+  var a=b.dataset.act;
+  if(a==='track'){state.track=b.dataset.v;save();render(false)}
+  else if(a==='home'){ui.view='home';ui.resetAsk=false;render(true)}
+  else if(a==='parent'){ui.view='parent';ui.resetAsk=false;render(true)}
+  else if(a==='sync'){ui.view='sync';ui.resetAsk=false;render(true)}
+  else if(a==='sync-create'){doCreate()}
+  else if(a==='sync-join'){doJoin()}
+  else if(a==='sync-name'){doName()}
+  else if(a==='sync-leave'){doLeave()}
+  else if(a==='sync-copy'){doCopy(b)}
+  else if(a==='sync-refresh'){refreshStudents()}
+  else if(a==='open'){ui.lessonId=b.dataset.id;ui.view='lesson';ui.step=0;ui.pq=null;markStep(ui.lessonId,0);render(true)}
+  else if(a==='step'){setStep(+b.dataset.i)}
+  else if(a==='answer'){answer(+b.dataset.s,+b.dataset.i)}
+  else if(a==='nextq'){var pq=ui.pq;pq.qi++;pq.stage=1;pq.wrong={1:[],2:[]};pq.first=true;pq.tries=0;ui.focus=pq.qi<curLesson().questions.length?'fieldset.q[data-n="1"] .opt':'.sum h3';render(false)}
+  else if(a==='again'){ui.pq=newPQ();ui.focus='fieldset.q[data-n="1"] .opt';render(false)}
+  else if(a==='reset-ask'){ui.resetAsk=true;render(false)}
+  else if(a==='reset-no'){ui.resetAsk=false;render(false)}
+  else if(a==='reset-yes'){state.progress={};store.set({track:state.track,progress:state.progress});push(true);ui.resetAsk=false;render(false)}
+});
+render(false);
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Enter')return;
+  var t=e.target;
+  if(t&&t.dataset&&t.dataset.enter){e.preventDefault();var b=$('[data-act="'+t.dataset.enter+'"]');if(b)b.click()}
+});
+startSync();
+})();
+</script>
+</body>
+</html>
